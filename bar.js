@@ -15,12 +15,19 @@ var metadata = ["Album_url","Artist","Profile_url","Album","ReleaseDate","Label"
 
 d3.csv("data-aoty/albumscores.csv", function(error, data) { 
 
+	data.sort(function(a,b) {return b.AoTY-a.AoTY;});
+
+	function change(k) {
+
+  	console.log("click: " + k);
+    row.sort(function(a, b) { return b[k] - a[k]; });
+
+  }
+
 	// Extract the list of dimensions and create a scale for each.
-  x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
-    return metadata.indexOf(d) == -1 && (y[d] = d3.scale.linear()
-        .domain(d3.extent(data, function(p) { return +p[d]; }))
-        .range([height, 0]));
-  }));
+  var dimensions = d3.keys(data[0]).filter(function(d) {
+    return metadata.indexOf(d) == -1;
+  });
 
 	var cell_width = width / (dimensions.length + 3) - 2;
 	var cell_height = 16;
@@ -31,20 +38,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
 	z.range([0,cell_width / 2])
 	 .domain([0,100]);
-
-	var header = svg.append("g")
-								  .attr("class","header");
-
-	header.append("text")		
-			  .text("Artist / Album" )
-        .attr("transform", function(d, i) { return "translate(0," + (cell_height - 4) + ")"; });;					 
-
-  header.selectAll("columns")
-  			.data(dimensions)
-  			.enter()
-  			.append("text")
-  			.attr("transform", function(d, i) { return "translate(" + (3.5 * cell_width + i * cell_width) + "," + (cell_height - 4) + ")"; })
-  			.text(function(d) { return d; });
 
 	var table = svg.append("g")
 								 .attr("class","table")
@@ -60,7 +53,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 	row.append("text")
      .text(function(d) { return d.Artist + " / \"" + d.Album + "\""; } )
      .attr("transform", function(d, i) { return "translate(0," + (cell_height - 4) + ")"; });
-
 
   var cell = row.selectAll("cell")
 					      .data(function(d) { return dimensions.map(function(k) { return d[k]; }); })
@@ -79,11 +71,29 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 	cell.append("rect")
       .attr("class","value")
       .attr("height", cell_height)
-      .attr("width", function(d) { return z(d); });
+      .attr("width", function(d) { return z(d); })
+      .append("title");
 
   cell.append("text")
       .attr("height", cell_height)
       .attr("transform", function(d, i) { return "translate(4," + (cell_height - 4) + ")"; })
       .text(function(d) { return d; });
+
+  var header = svg.append("g")
+								  .attr("class","header");
+
+	header.append("text")		
+			  .text("Artist / Album" )
+        .attr("transform", function(d, i) { return "translate(0," + (cell_height - 4) + ")"; });;					 
+
+  header.selectAll("column")
+  			.data(dimensions)
+  			.enter()
+  			.append("g")
+  			.attr("class","column")
+  			.on("click", function(k) { change(k); })
+  			.append("text")
+  			.attr("transform", function(d, i) { return "translate(" + (3.5 * cell_width + i * cell_width) + "," + (cell_height - 4) + ")"; })
+  			.text(function(d) { return d; });
 
 });

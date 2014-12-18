@@ -31,3 +31,7 @@ rect {
 .cell text {
 	font: 8px sans-serif;
 }
+
+.column {
+	cursor: s-resize;
+}
