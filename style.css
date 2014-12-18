@@ -2,26 +2,32 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.chart rect {
-  fill: steelblue;
-}
-
-.chart text {
+text {
+  fill: black;
   font: 10px sans-serif;
+  text-align: right;
 }
 
-.axis path {
-  display: none;
-}
-
-.axis line {
-  stroke: #fff;
-  stroke-opacity: .5;
+.background path {
+  fill: none;
+  stroke: #ddd;
   shape-rendering: crispEdges;
 }
 
-text {
-  fill: white;
-  font: 10px sans-serif;
-  text-anchor: left;
+rect {
+	fill: none;
+	stroke: #999;
+	stroke-width: 1px;
+}
+
+.value {
+	fill: #bbb;
+}
+
+.header text {
+	font-weight: bold;
+}
+
+.cell text {
+	font: 8px sans-serif;
 }
