@@ -2,6 +2,16 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#header_panel {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 10px 10px 0px 10px;
+	background: #eee;
+	border-bottom: 1px solid #999;
+}
+
 .column text {
   fill: black;
   font: 10px sans-serif;
@@ -22,6 +32,7 @@ rect {
 
 .value {
 	fill: #bbb;
+	cursor: pointer;
 }
 
 .cell text {
@@ -29,11 +40,28 @@ rect {
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
-	cursor: default;
+	cursor: pointer;
 }
 
 .column {
-	cursor: s-resize;
+	cursor: pointer;
+}
+
+.year {
+	fill: #b00;
+	font-weight: bold;
+	font-family: Palatino, Times, serif;
+}
+
+.title {
+	font-family: Palatino, Times, serif;
+	font-weight: bold;
+	fill: #666;
+}
+
+.subtitle {
+	font: 8px sans-serif;
+	fill: #666;
 }
 
 .artist {
@@ -42,7 +70,8 @@ rect {
 }
 
 .artist:hover {
-	fill: blue;
+	fill: #b00;
+	text-decoration: underline;
 }
 
 .album {
@@ -51,22 +80,23 @@ rect {
 }
 
 .album:hover {
-	fill: blue;
+	fill: #b00;
+	text-decoration: underline;
 }
 
-div.tooltip {
+.tooltip {
   position: absolute;	
   text-align: left;	
   width: 120px;	
   height: 80px;		
   padding: 5px 5px 5px 5px;
   font: 8px sans-serif;	
-  background: #dff;	
+  background: #fdd;	
   border: 0px;					
   border-radius: 4px;
 }
 
-div.tooltip a {
+.tooltip a {
 	text-decoration: none;
 	cursor: pointer;
 }

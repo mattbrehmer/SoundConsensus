@@ -1,6 +1,15 @@
+window.pos = function() {
+  if (window.scrollX != null && window.scrollY != null) return { x: window.scrollX, y : window.scrollY };
+  else return { x: document.body.parentNode.scrollLeft, y : document.body.parentNode.scrollTop };
+};
+
+window.onscroll = function(e){
+  document.getElementById('header_panel').style.top = window.pos().y + 'px';
+};
+
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = 2800,
-    height = 16700;
+    height = 16720;
 
 var x = d3.scale.ordinal().rangePoints([0, width], 1),
     y = {},
@@ -22,6 +31,12 @@ var svg = d3.select("body")
 								 .style('pointer-events', 'none')
 								 .style("opacity", 0);
 						});
+
+var header_svg = d3.select("body")
+						.append("svg")
+						.attr("id", "header_panel")
+    				.attr("width", width)
+    				.attr("height", 25);						
 
 var metadata = ["Album_url","Artist","Profile_url","Album","ReleaseDate","Label","Genre","Artist_url"]
 
@@ -51,21 +66,37 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 	z.range([0,cell_width / 2])
 	 .domain([0,100]);
 
-	var header = svg.append("g")
-								  .attr("class","header");
+	var header = header_svg.append("g")
+								  			 .attr("class","header");
 
+  header.append("text")
+  	 .attr("class","title")
+		 .attr("dy", "0.7em")
+     .text("SoundConsensus");
+
+  header.append("text")
+  	 .attr("class","year")
+		 .attr("dy", "0.7em")
+		 .attr("dx", "8em")
+     .text("2014");
+
+  header.append("text")
+  	 .attr("class","subtitle")
+		 .attr("dy", "2.1em")
+		 .text("a visual summary of music review scores");
+     
 	header.append("text")
 		 .attr("text-anchor", "end")
      .attr("class","artist")
 		 .attr("dy", "0.9em")
-     .text(function(d) { return "Artist" ; } )
+     .text("Artist")
      .attr("transform", function(d, i) { return "translate(" + (1.75 * cell_width) + ",0)"; });
 
   header.append("text")
   	 .attr("class","album")
 		 .attr("text-anchor", "end")
      .attr("dy", "2em")
-     .text(function(d) { return "Album" ; } )
+     .text("Album")
      .attr("transform", function(d, i) { return "translate(" + (1.75 * cell_width) + ",0)"; });
 
   header.selectAll("column")
@@ -80,7 +111,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
 	var table = svg.append("g")
 								 .attr("class","table")
-								 .attr("transform", function(d, i) { return "translate(0," + 25 + ")"; });
+								 .attr("transform", function(d, i) { return "translate(0," + 35 + ")"; });
 
 	var row = table.selectAll("row")
 								 .data(data)
@@ -108,6 +139,10 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 											.transition()
 				            	.duration(200)
 				            	.style("fill", "#f99");
+				            d3.select(this).selectAll("text.album")
+				            	.style("fill", "#b00");
+			            	d3.select(this).selectAll("text.artist")
+				            	.style("fill", "#b00");
 									})
 									.on("mouseout", function() {
 										d3.select(this).selectAll("rect.value")
@@ -115,6 +150,10 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 				            	.delay(200)
 				            	.duration(200)
 				            	.style("fill", "#bbb");
+				            d3.select(this).selectAll("text.album")
+				            	.style("fill", "#000");
+			            	d3.select(this).selectAll("text.artist")
+				            	.style("fill", "#666");
 									});
 
 
@@ -131,13 +170,13 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
      .attr("transform", function(d, i) { return "translate(" + (1.75 * cell_width) + ",0)"; });
 
   row_header.append("a")
-     .attr("xlink:href", function(d){ return d.Album_url; })
-  	 .append("text")
-  	 .attr("class","album")
-		 .attr("text-anchor", "end")
-     .attr("dy", "2em")
-     .text(function(d) { return d.Album ; } )
-     .attr("transform", function(d, i) { return "translate(" + (1.75 * cell_width) + ",0)"; });
+     				.attr("xlink:href", function(d){ return d.Album_url ; })
+     				.append("text")
+			  	  .attr("class","album")
+					  .attr("text-anchor", "end")
+			      .attr("dy", "2em")
+			      .text(function(d) { return d.Album ; } )
+			      .attr("transform", function(d, i) { return "translate(" + (1.75 * cell_width) + ",0)"; });
 
   var cell = row.selectAll("cell")
 					      .data(function(d) { return dimensions.map(function(k) { return d[k]; }); })
@@ -153,7 +192,10 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 		  .attr("height", cell_height)
 		  .attr("width", cell_width / 2);					        
 
-	cell.append("rect")
+	cell.append("a")
+			.attr("class", "link")
+     	.attr("xlink:href", function(d) { return d3.select(this.parentNode.parentNode).datum().Album_url; } )
+     	.append("rect")
       .attr("class","value")
       .attr("height", cell_height)
       .attr("width", function(d) { return z(d); });
