@@ -2,10 +2,10 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-text {
+.column text {
   fill: black;
   font: 10px sans-serif;
-  text-align: right;
+  font-weight: bold;
 }
 
 .background path {
@@ -15,7 +15,7 @@ text {
 }
 
 rect {
-	fill: none;
+	fill: #fff;
 	stroke: #999;
 	stroke-width: 1px;
 }
@@ -24,14 +24,49 @@ rect {
 	fill: #bbb;
 }
 
-.header text {
-	font-weight: bold;
-}
-
 .cell text {
 	font: 8px sans-serif;
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+	cursor: default;
 }
 
 .column {
 	cursor: s-resize;
+}
+
+.artist {
+	fill: #666;
+	font: 8px sans-serif;
+}
+
+.artist:hover {
+	fill: blue;
+}
+
+.album {
+	font: 8px sans-serif;
+	font-weight: bold;
+}
+
+.album:hover {
+	fill: blue;
+}
+
+div.tooltip {
+  position: absolute;	
+  text-align: left;	
+  width: 120px;	
+  height: 80px;		
+  padding: 5px 5px 5px 5px;
+  font: 8px sans-serif;	
+  background: #dff;	
+  border: 0px;					
+  border-radius: 4px;
+}
+
+div.tooltip a {
+	text-decoration: none;
+	cursor: pointer;
 }
