@@ -24,14 +24,16 @@ body {
 	border-top: 1px solid #999;
 }
 
-.column text {
+.footer_text {
   fill: black;
   font: 8px sans-serif;
   font-weight: bold;
 }
 
-.row {
-	opacity: 0.33;
+.column text {
+  fill: black;
+  font: 8px sans-serif;
+  font-weight: bold;
 }
 
 .background path {
