@@ -47,8 +47,8 @@ body {
 
 rect {
 	fill: #fff;
-	stroke: #999;
-	stroke-width: 0.6px;
+	stroke: #bbb;
+	stroke-width: 0.5px;
 }
 
 .value {
@@ -58,6 +58,7 @@ rect {
 
 .cell text {
 	font: 8px sans-serif;
+	fill: #666;
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */

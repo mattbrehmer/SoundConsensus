@@ -35,8 +35,8 @@ var margin = {top: 20, right: 20, bottom: 20, left: 20},
 var x = d3.scale.ordinal().rangePoints([0, width], 1),
     y = {}, //scales for each dimension
     z = d3.scale.linear(), //scale for bar charts
-    genreScale = d3.scale.ordinal(), //ordinal scale for genres
-    labelScale = d3.scale.ordinal(); //ordinal scale for labels
+    genre_scale = d3.scale.ordinal(), //ordinal scale for genres
+    label_scale = d3.scale.ordinal(); //ordinal scale for labels
 
 //initialize dispatch for highlighting selections from dropdowns
 var dispatch = d3.dispatch("highlight");
@@ -101,12 +101,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
    .domain([0,100]);
 
   //specify genre scale domain
-  genreScale.domain(data.map( function (d) { 
+  genre_scale.domain(data.map( function (d) { 
     return d.Genre; 
   }));
 
   //specify label scale domain
-  labelScale.domain(data.map( function (d) { 
+  label_scale.domain(data.map( function (d) { 
     return d.Label; 
   }));
 
@@ -272,18 +272,18 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                     .transition()
                     .delay(100)
                     .duration(200)
-                    .style("stroke", "#999");
+                    .style("stroke", "#bbb");
                   d3.select(this)
                     .selectAll("rect.value")
                     .transition()
                     .delay(100)
                     .duration(200)
                     .style("fill", "#ccc")
-                    .style("stroke", "#999");
+                    .style("stroke", "#bbb");
                   d3.select(this).selectAll("text.album")
-                    .style("fill", "#000");
-                  d3.select(this).selectAll("text.artist")
                     .style("fill", "#666");
+                  d3.select(this).selectAll("text.artist")
+                    .style("fill", "#000");
                 });
 
   //append row header to each row to contain artist and album
@@ -327,8 +327,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .attr("class","index")
             .attr("text-anchor", "end")
             .attr("dy", "1.5em")
-            .text(function(d, i) { 
-              return i + 1; 
+            .text(function(d, i) {
+              if (width >= 1400) 
+                return i + 1;
+              else 
+                return ""; //don't show in small windows
             })
             .attr("transform", function(d, i) { 
               return "translate(" + (3.47 * cell_width) + ",0)"; 
@@ -474,40 +477,40 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
     .html("Highlight genres and / or record labels: ")
 
   //append genre dropdown to footer, 
-  var selectGenre = d3.select("#footer")
-                      .append("select")
-                      .on("change", dropdownChange),
-      genreOptions = selectGenre.selectAll("option")
-                                .data(genreScale.domain().sort());
+  var select_genre = d3.select("#footer")
+                       .append("select")
+                       .on("change", dropdownChange),
+      genre_options = select_genre.selectAll("option")
+                                  .data(genre_scale.domain().sort());
 
   //populate genre dropdown with genres 
-  genreOptions.enter()
-         .append("option")
-         .text(function (d) { 
-          return d; 
-         });     
+  genre_options.enter()
+               .append("option")
+               .text(function (d) { 
+                return d; 
+               });     
 
   //append label dropdown to footer, 
-  var selectLabel = d3.select("#footer")
+  var select_label = d3.select("#footer")
                       .append("select")
                       .on("change", dropdownChange),
-      labelOptions = selectLabel.selectAll("option")
-                                .data(labelScale.domain().sort());
+      label_options = select_label.selectAll("option")
+                                .data(label_scale.domain().sort());
 
   //populate label dropdown with labels
-  labelOptions.enter()
-         .append("option")
-         .text(function (d) { 
-          return d; 
-         });
+  label_options.enter()
+               .append("option")
+               .text(function (d) { 
+                return d; 
+               });
 
   //whenever an option is selected from the dropdowns, issue a dispatch event 
   function dropdownChange() {
-    var selectedGenreIndex = selectGenre.property("selectedIndex"),
-        selectedGenre = genreOptions[0][selectedGenreIndex].__data__,
-        selectedLabelIndex = selectLabel.property("selectedIndex"),
-        selectedLabel = labelOptions[0][selectedLabelIndex].__data__;
-    dispatch.highlight(selectedGenre,selectedLabel);
+    var selected_genre_index = select_genre.property("selectedIndex"),
+        selected_genre = genre_options[0][selected_genre_index].__data__,
+        selected_label_index = select_label.property("selectedIndex"),
+        selected_label = label_options[0][selected_label_index].__data__;
+    dispatch.highlight(selected_genre,selected_label);
   }       
 
 }); //end d3.csv load
