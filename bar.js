@@ -39,8 +39,7 @@ var x = d3.scale.ordinal().rangePoints([0, width], 1),
     labelScale = d3.scale.ordinal(); //ordinal scale for labels
 
 //initialize dispatch for highlighting selections from dropdowns
-var genreDispatch = d3.dispatch("genreHighlight");
-var labelDispatch = d3.dispatch("labelHighlight");
+var dispatch = d3.dispatch("highlight");
 
 //initialize tooltip, initially invisible
 var tooltip = d3.select("body")
@@ -50,16 +49,23 @@ var tooltip = d3.select("body")
 
 //initialize main svg area
 var main_svg = d3.select("body")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+                 .append("svg")
+                 .attr("width", width)
+                 .attr("height", height);
 
 //initialize header svg
 var header_svg = d3.select("body")
-            .append("svg")
-            .attr("id", "header_panel")
-            .attr("width", width)
-            .attr("height", 25);          
+                   .append("svg")
+                   .attr("id", "header_panel")
+                   .attr("width", width)
+                   .attr("height", 25); 
+
+//initialize footer svg
+var footer_svg = d3.select("body")
+                   .append("svg")
+                   .attr("id", "footer_panel")
+                   .attr("width", width)
+                   .attr("height", 25) ;                             
               
 //create an array of known metadata dimensions              
 var metadata = ["Album_url", 
@@ -69,7 +75,8 @@ var metadata = ["Album_url",
                 "ReleaseDate",
                 "Label",
                 "Genre",
-                "Artist_url"]
+                "Artist_url",
+                "AoTY"]
 
 //load the data from csv
 d3.csv("data-aoty/albumscores.csv", function(error, data) { 
@@ -86,13 +93,8 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
   }));
 
   //determine cell size based on the number of dimensions
-  var cell_width = width / (dimensions.length + 4 );
+  var cell_width = width / (dimensions.length + 4.5 );
   var cell_height = 16;
-
-  //swap first two dimensions such that AoTY appears first
-  var tmp = dimensions[1];
-  dimensions[1] = dimensions[0];
-  dimensions[0] = tmp;
 
   //specify range and domain of bar charts based on cell width
   z.range([0,cell_width / 1.5])
@@ -173,6 +175,17 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           return "translate(" + (3.25 * cell_width) + ",0)"; 
         });
 
+  //append aoty column head to header
+  header.append("g")
+        .attr("class","column")
+        .append("text")
+        .attr("dy", "1.2em")
+        .text("AoTY \t \u25BC")
+        .style("fill", "#b00")
+        .attr("transform", function(d, i) { 
+          return "translate(" + (3.5 * cell_width) + ",0)"; 
+        });      
+
   //append column heads to header, one for each dimension
   header.selectAll("column")
         .data(dimensions)
@@ -182,7 +195,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
         .append("text")
         .attr("dy", "1.2em")            
         .attr("transform", function(d,i) { 
-          return "translate(" + (3.5 * cell_width + i * cell_width) + ",0)"; 
+          return "translate(" + (4.5 * cell_width + i * cell_width) + ",0)"; 
         })
         .text(function(d) { 
           return d; 
@@ -196,10 +209,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
   //append "table" of rows containing data to main panel
   var table = main_svg.append("g")
-                 .attr("class","table")
-                 .attr("transform", function(d, i) { 
-                  return "translate(0," + 35 + ")"; 
-                 });
+                      .attr("class","table")
+                      .attr("transform", function(d, i) { 
+                        return "translate(0," + 35 + ")"; 
+                      });
+
+  table.append("line")                    
 
   //append rows to the table, one for each datum
   var row = table.selectAll("row")
@@ -210,7 +225,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                  .attr("transform", function(d, i) { 
                   return "translate(0," + i * 25 + ")"; 
                  })
-                 .on("mouseover", function(d) { //specify tooltip behaviour
+                 .on("mouseover", function(d,i) { //specify tooltip behaviour
                   tooltip.transition()
                      .duration(200) 
                      .style("opacity", 0);
@@ -218,15 +233,17 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                      .duration(200) 
                      .style("opacity", 1);  
                   tooltip.html(
-                    "<strong>Artist</strong>: "  + d.Artist +  
-                    "<br/><strong>Album</strong>: "  + d.Album +   
-                    "<br/><strong>Release Date</strong>: "  + d.ReleaseDate +  
-                    "<br/><strong>Label</strong>: "  + d.Label +
-                    "<br/><strong>Genre</strong>: "  + d.Genre +
-                    "<br/>" + d.Artist_url)
+                    "<strong>Artist</strong>: " + d.Artist +  
+                    "<br/><strong>Album</strong>: " + d.Album +   
+                    "<br/><strong>Release Date</strong>: " + d.ReleaseDate +  
+                    "<br/><strong>Label</strong>: " + d.Label +
+                    "<br/><strong>Genre</strong>: " + d.Genre +
+                    "<br/><strong>AoTY rank (score)</strong>: " + (i + 1) +
+                    " / " + (data.length) + " (" + d.AoTY +
+                    ") <br/>" + d.Artist_url)
                     .style("left", (d3.event.pageX + 10) + "px")       
                     .style("top", (d3.event.pageY + 15) + "px");                    
-                  d3.select(this) //genreHighlight corresponding row of cells 
+                  d3.select(this) //highlight corresponding row of cells 
                     .selectAll("rect")
                     .transition()
                     .duration(200)
@@ -305,6 +322,57 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
               return "translate(" + (3.25 * cell_width) + ",0)"; 
             });
 
+  //append index to row header
+  row_header.append("text")
+            .attr("class","index")
+            .attr("text-anchor", "end")
+            .attr("dy", "1.5em")
+            .text(function(d, i) { 
+              return i + 1; 
+            })
+            .attr("transform", function(d, i) { 
+              return "translate(" + (3.47 * cell_width) + ",0)"; 
+            });          
+
+  //append aoty cell to each row
+  var aotycell = row.append("g")
+                    .attr("class","cell")
+                    .attr("transform", function(d) { 
+                      return "translate(" + 
+                        (3.5 * cell_width) + 
+                        ",0)"; 
+                    })
+                    .attr("width", cell_width / 1.5)
+                    .attr("height", cell_height);
+
+  //append rectangular bounds to each cell
+  aotycell.append("rect")   
+          .attr("class", "bounds")
+          .attr("height", cell_height)
+          .attr("width", cell_width / 1.5);                 
+
+  //append link to album page and bar scaled to score to cell
+  aotycell.append("a")
+          .attr("class", "link")
+          .attr("xlink:href", function(d) { 
+            return d.Album_url; 
+          })
+          .append("rect")
+          .attr("class","value")
+          .attr("height", cell_height)
+          .attr("width", function(d) { 
+            return z(d.AoTY); 
+          });
+
+  //append album score in the cell
+  aotycell.append("text")
+          .attr("height", cell_height)
+          .attr("dy", "1.5em")
+          .attr("dx", "0.3em")
+          .text(function(d) { 
+            return d.AoTY; 
+          });                            
+
   //append cells to each row, map each cell to a dimension
   var cell = row.selectAll("cell")
                 .data(function(d) { 
@@ -316,7 +384,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                 .append("g")
                 .attr("class","cell")
                 .attr("transform", function(d, i) { 
-                  return "translate(" + (3.5 * cell_width + i * cell_width) + ",0)"; 
+                  return "translate(" + 
+                    (4.5 * cell_width + i * cell_width) + 
+                    ",0)"; 
                 })
                 .attr("width", cell_width / 1.5)
                 .attr("height", cell_height);
@@ -325,7 +395,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
   cell.append("rect")   
       .attr("class", "bounds")
       .attr("height", cell_height)
-      .attr("width", cell_width / 1.5);                 
+      .attr("width", cell_width / 1.5)
+      .style("stroke-width", function(d) { 
+        if (d == '')
+          return 0 + "px"; 
+      });                 
 
   //append link to album page and bar scaled to score to cell
   cell.append("a")
@@ -347,22 +421,21 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       .attr("dx", "0.3em")
       .text(function(d) { 
         return d; 
+      })      
+      .style("fill", function(d) { 
+        if (d == 100)
+          return "#b00"; 
+      })
+      .style("font-weight", function(d) { 
+        if (d == 100)
+          return "bold"; 
       });
 
   //listen for dispatch events from genre selector
-  genreDispatch.on("genreHighlight.row", function(genre) {
+  dispatch.on("highlight.row", function(genre,label) {
     row.style("opacity", function(d){
-      if (d.Genre == genre || genre == "") 
-        return 1;
-      else 
-        return 0.25;
-    })
-  });
-
-  //listen for dispatch events from label selector
-  labelDispatch.on("labelHighlight.row", function(label) {
-    row.style("opacity", function(d){
-      if (d.Label == label || label == "") 
+      if ((d.Genre == genre || genre == "") && 
+          (d.Label == label || label == "")) 
         return 1;
       else 
         return 0.25;
@@ -375,10 +448,35 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
   **/ 
 
+  //append container credits to footer panel
+  var footer = footer_svg.append("g")
+                         .attr("class","footer");
+
+  //append title to footer                       
+  footer.append("a")
+        .attr("xlink:href", 
+          "https://twitter.com/mattbrehmer")
+        .append("text")
+        .attr("class","attribution")
+        .attr("dy", "0.6em")
+        .text("by @mattbrehmer");
+
+  //append subtitle to footer
+  footer.append("a")
+        .attr("xlink:href", 
+          "http://www.albumoftheyear.org/ratings/overall/2014/")
+        .append("text")
+        .attr("class","attribution")
+        .attr("dy", "2.0em")
+        .text("data from AoTY / albumoftheryear.org");
+
+  d3.select("#footer")
+    .html("Highlight genres and / or record labels: ")
+
   //append genre dropdown to footer, 
   var selectGenre = d3.select("#footer")
                       .append("select")
-                      .on("change", changeGenre),
+                      .on("change", dropdownChange),
       genreOptions = selectGenre.selectAll("option")
                                 .data(genreScale.domain().sort());
 
@@ -387,19 +485,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
          .append("option")
          .text(function (d) { 
           return d; 
-         });
-
-  //whenever a genre is selected from the dropdown, issue a dispatch event 
-  function changeGenre() {
-    var selectedGenreIndex = selectGenre.property("selectedIndex"),
-        selectedGenre = genreOptions[0][selectedGenreIndex].__data__;
-    genreDispatch.genreHighlight(selectedGenre);
-  }
+         });     
 
   //append label dropdown to footer, 
   var selectLabel = d3.select("#footer")
                       .append("select")
-                      .on("change", changeLabel),
+                      .on("change", dropdownChange),
       labelOptions = selectLabel.selectAll("option")
                                 .data(labelScale.domain().sort());
 
@@ -410,11 +501,13 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           return d; 
          });
 
-  //whenever a label is selected from the dropdown, issue a dispatch event 
-  function changeLabel() {
-    var selectedLabelIndex = selectLabel.property("selectedIndex"),
-        selectedlabel = labelOptions[0][selectedLabelIndex].__data__;
-    labelDispatch.labelHighlight(selectedlabel);
-  }
+  //whenever an option is selected from the dropdowns, issue a dispatch event 
+  function dropdownChange() {
+    var selectedGenreIndex = selectGenre.property("selectedIndex"),
+        selectedGenre = genreOptions[0][selectedGenreIndex].__data__,
+        selectedLabelIndex = selectLabel.property("selectedIndex"),
+        selectedLabel = labelOptions[0][selectedLabelIndex].__data__;
+    dispatch.highlight(selectedGenre,selectedLabel);
+  }       
 
 }); //end d3.csv load

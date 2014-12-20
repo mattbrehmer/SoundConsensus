@@ -12,22 +12,25 @@ body {
 	border-bottom: 1px solid #999;
 }
 
-#footer {
+#footer_panel {
 	position: fixed;
-	width: 100%;
-	height: 25px;
 	bottom: 0px;
 	left: 0px;
 	margin: 0px;
-	padding: 10px 10px 10px 10px;
+	padding: 10px 10px 0px 10px;
 	background: #eee;
 	border-top: 1px solid #999;
 }
 
-.footer_text {
-  fill: black;
-  font: 8px sans-serif;
-  font-weight: bold;
+#footer {
+	position: fixed;
+	bottom: 7px;
+	right: 10px;
+	margin: 0px;
+	padding: 0px;
+	z-index: 10;
+	fill: #666;
+  	font: 8px sans-serif;
 }
 
 .column text {
@@ -75,16 +78,28 @@ rect {
 	font-family: Palatino, Times, serif;
 	font-weight: bold;
 	fill: #666;
+	cursor: default;
 }
 
 .subtitle {
 	font: 8px sans-serif;
+	cursor: default;
 	fill: #666;
 }
 
-.artist {
-	fill: #666;
+.attribution {
 	font: 8px sans-serif;
+	fill: #666;
+}
+
+.attribution:hover {
+	fill: #b00;
+	text-decoration: underline;
+}
+
+.artist {
+	font: 8px sans-serif;
+	font-weight: bold;
 }
 
 .artist:hover {
@@ -94,7 +109,13 @@ rect {
 
 .album {
 	font: 8px sans-serif;
-	font-weight: bold;
+	fill: #666;
+}
+
+.index {
+	font: 7px sans-serif;
+	fill: #999;
+	cursor: default;
 }
 
 .album:hover {
