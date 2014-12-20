@@ -12,10 +12,26 @@ body {
 	border-bottom: 1px solid #999;
 }
 
+#footer {
+	position: fixed;
+	width: 100%;
+	height: 25px;
+	bottom: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 10px 10px 10px 10px;
+	background: #eee;
+	border-top: 1px solid #999;
+}
+
 .column text {
   fill: black;
-  font: 10px sans-serif;
+  font: 8px sans-serif;
   font-weight: bold;
+}
+
+.row {
+	opacity: 0.33;
 }
 
 .background path {
@@ -27,11 +43,11 @@ body {
 rect {
 	fill: #fff;
 	stroke: #999;
-	stroke-width: 1px;
+	stroke-width: 0.6px;
 }
 
 .value {
-	fill: #bbb;
+	fill: #ccc;
 	cursor: pointer;
 }
 
@@ -99,4 +115,5 @@ rect {
 .tooltip a {
 	text-decoration: none;
 	cursor: pointer;
+	fill: #000;
 }
