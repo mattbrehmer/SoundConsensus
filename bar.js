@@ -5,7 +5,7 @@ SoundConsensus
 A visual summary of album review scores
 Data scraped from albumoftheyear.org
 
-Matt Brehmer / @mattbrehmer
+by Matt Brehmer / @mattbrehmer
 
 December 2014
 
@@ -32,8 +32,8 @@ var margin = {top: 20, right: 20, bottom: 20, left: 20},
     height = 16750;
 
 //initialize scales
-var x = d3.scale.ordinal().rangePoints([0, width], 1),
-    y = {}, //scales for each dimension
+var x = d3.scale.ordinal(),
+    y = d3.scale.linear(), //scales for each dimension
     z = d3.scale.linear(), //scale for bar charts
     genre_scale = d3.scale.ordinal(), //ordinal scale for genres
     label_scale = d3.scale.ordinal(); //ordinal scale for labels
@@ -95,6 +95,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
   //determine cell size based on the number of dimensions
   var cell_width = width / (dimensions.length + 4.5 );
   var cell_height = 16;
+
+  x.rangePoints([cell_width * 4.5, dimensions.length * cell_width], 1)  
+
+  //specify range and domain of bar charts based on cell width
+  y.range([height,0])
+   .domain([0,100]);
 
   //specify range and domain of bar charts based on cell width
   z.range([0,cell_width / 1.5])
@@ -213,8 +219,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       .attr("transform", function(d, i) { 
                         return "translate(0," + 35 + ")"; 
                       });
-
-  table.append("line")                    
 
   //append rows to the table, one for each datum
   var row = table.selectAll("row")
@@ -374,12 +378,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           .attr("dx", "0.3em")
           .text(function(d) { 
             return d.AoTY; 
-          });                            
+          });       
 
   //append cells to each row, map each cell to a dimension
   var cell = row.selectAll("cell")
                 .data(function(d) { 
-                  return dimensions.map(function(k) { 
+                  return dimensions.map(function(k) {
                     return d[k]; 
                   }); 
                 })
@@ -389,7 +393,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                 .attr("transform", function(d, i) { 
                   return "translate(" + 
                     (4.5 * cell_width + i * cell_width) + 
-                    ",0)"; 
+                    "," + getRank(d,i) + ")"; 
                 })
                 .attr("width", cell_width / 1.5)
                 .attr("height", cell_height);
@@ -444,6 +448,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
         return 0.25;
     })
   });
+
+  //function for determining rank according to current dimension 
+  function getRank (d,dimension) {
+    return 0;
+  }
 
   /**
 
