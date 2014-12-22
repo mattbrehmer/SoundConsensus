@@ -134,10 +134,18 @@ rect {
   background: #fdd;	
   border: 0px;					
   border-radius: 4px;
+  z-index: 10;
 }
 
 .tooltip a {
 	text-decoration: none;
 	cursor: pointer;
 	fill: #000;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #999;
+  shape-rendering: crispEdges;
 }

@@ -4,6 +4,8 @@ albums.dt = data.table()
 
 scrapeAlbum = function(url) {
   
+  print(c("scraping: ",url))
+  
   raw.data = readLines(as.character(url),warn=F)
   
   #locate relevant metadata on page
@@ -30,7 +32,7 @@ scrapeAlbum = function(url) {
   #genre scraping depends on presence / absence of website
   if (is.na(website)) {
     genre = gsub(".*GENRE.*>(.*)</a>.*TAGS*","\\1",raw.data[genreLoc])
-    genre = gsub("([A-Z]*)<.*","\\1",genre)
+    genre = gsub("([A-Z]*,* *[A-Z]*)<.*","\\1",genre)
   }
   if (!is.na(website)) {
     genre = gsub(".*GENRE.*>(.*)</a>.*WEBSITE.*","\\1",raw.data[genreLoc])

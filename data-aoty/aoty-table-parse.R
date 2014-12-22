@@ -3,7 +3,7 @@ require(data.table)
 #scrape the aggregate score table for the specified year
 scrapeTable = function(year){
   
-  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/",sep = "")
+  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/18",sep = "")
   
   raw.data = readLines(url,warn=F)
   
@@ -18,7 +18,7 @@ scrapeTable = function(year){
 }
 
 #change X in scrapeTable(X) to specify the year e.g. 2014
-table = scrapeTable(yr)
+table = scrapeTable(2014)
 
 table = unique(table) #remove duplicate header rows
 table = table[-26] #remove first duplicate header row
@@ -43,7 +43,7 @@ aotyUrls = aotyUrls[3:length(aotyUrls)]
 colNames = c(colNames,reviewNames,"Artist","Profile_url","Album","Album_url")
 
 #remove header from row 1
-table[1] = gsub(".*(<tr bgcolor=\"#b1cfdc\">.*)","\\1",table[1])
+table[1] = gsub(".*(<tr bgcolor=\"#......\">.*)","\\1",table[1])
 
 #coerce chacacters to numeric
 numericFromChar = function(chr) {

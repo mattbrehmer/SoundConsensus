@@ -30,7 +30,7 @@ albumranks.dt = albumscores.dt
 convertToRank = function(col) {
   
   if(is.numeric(col))
-    col = rank(-col,na.last = "keep",ties.method = "min")
+    col = rank(-col,na.last = "keep",ties.method = "random")
   
   return(col)
 }

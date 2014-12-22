@@ -1,6 +1,6 @@
 #main pre-processing script
 
-#change eyar as necessary
+#change year as necessary
 yr = 2014
 
 source("aoty-table-parse.R")
