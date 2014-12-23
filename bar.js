@@ -41,8 +41,6 @@ var x = d3.scale.ordinal(),
 //initialize dispatch for highlighting selections from dropdowns
 var dispatch = d3.dispatch("highlight");
 
-var cdata;
-
 //initialize tooltip, initially invisible
 var tooltip = d3.select("body")
                 .append("div")   
@@ -84,8 +82,6 @@ var metadata = ["Album_url",
 //load the data from csv
 d3.csv("data-aoty/albumscores.csv", function(error, data) { 
   d3.csv("data-aoty/albumranks.csv", function(error, rank_data) { 
-
-    cdata = rank_data;
 
     rank_dimensions = d3.keys(rank_data[0]);
 
@@ -248,9 +244,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                    .enter()
                    .append("g")
                    .attr("class", "row")
-                   // .attr("transform", function(d, i) { 
-                   //  return "translate(0," + i * 25 + ")"; 
-                   // })
                    .on("mouseover", function(d,i) { //specify tooltip behaviour
                     tooltip.transition()
                        .duration(200) 
@@ -269,6 +262,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       ") <br/>" + d.Artist_url)
                       .style("left", (d3.event.pageX + 10) + "px")       
                       .style("top", (d3.event.pageY + 15) + "px");                    
+                    // this.parentNode.appendChild(this);
+                    d3.select('.table').selectAll(".row").sort(function (a, b) { // select the parent and sort the path's
+                        if (a.Album_url != d.Album_url) return -1;               // a is not the hovered element, send "a" to the back
+                        else return 1;                             // a is the hovered element, bring "a" to the front
+                    });
                     d3.select(this) //highlight corresponding row of cells 
                       .selectAll("rect")
                       .transition()
@@ -298,6 +296,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       .transition()
                       .delay(100)
                       .duration(200)
+                      .style("z-index", "0")
                       .style("stroke", "#bbb");
                     d3.select(this)
                       .selectAll("rect.value")
@@ -413,6 +412,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
     //append album score in the cell
     aotycell.append("text")
+            .attr("class","score")
             .attr("height", cell_height)
             .attr("dy", "1.5em")
             .attr("dx", "0.3em")
@@ -435,11 +435,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                   .attr("class","cell")                
                   .attr("width", cell_width / 1.5)
                   .attr("height", cell_height);
-                  // .attr("transform", function(d, i) { 
-                  //   return "translate(" + 
-                  //     (4.5 * cell_width + i * cell_width) + 
-                  //     "," + getRank(d,i) + ")"; 
-                  // });
 
     //append rectangular bounds to each cell
     cell.append("rect")   
@@ -484,6 +479,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
     //append album score in the cell
     cell.append("text")
+        .attr("class","score")
         .attr("height", cell_height)
         .attr("dy", "1.5em")
         .attr("dx", "0.3em")
@@ -507,16 +503,52 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           else
             return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]));
         });
-
+      
     //listen for dispatch events from genre selector
     dispatch.on("highlight.row", function(genre,label) {
       row.style("opacity", function(d){
         if ((d.Genre == genre || genre == "") && 
-            (d.Label == label || label == "")) 
+            (d.Label == label || label == ""))
           return 1;
         else 
           return 0.25;
-      })
+      }); 
+      row.style("pointer-events", function(d){
+        if ((d.Genre == genre || genre == "") && 
+            (d.Label == label || label == ""))
+          return 'inherit';
+        else 
+          return 'none';
+      }); 
+      row.sort(function (d, a) { // select the parent and sort the path's
+        if ((d.Genre == genre || genre == "") && 
+            (d.Label == label || label == ""))               // a is not the hovered element, send "a" to the back
+          return 1;
+        else 
+          return -1;                             // a is the hovered element, bring "a" to the front
+      });
+      row.style("display", function(d){
+        if ((d.Genre == genre || genre == "") && 
+            (d.Label == label || label == ""))
+          return 'inline';
+        else 
+          return 'none';
+      }); 
+
+      // row.selectAll('.value').style("display", function(d){
+      //   if ((d3.select(this.parentNode.parentNode.parentNode).datum().Genre == genre || genre == "") && 
+      //       (d3.select(this.parentNode.parentNode.parentNode).datum().Label == label || label == ""))
+      //     return 'inline';
+      //   else 
+      //     return 'none';
+      // }); 
+      // row.selectAll('.score').style("display", function(d){
+      //   if ((d3.select(this.parentNode.parentNode).datum().Genre == genre || genre == "") && 
+      //       (d3.select(this.parentNode.parentNode).datum().Label == label || label == ""))
+      //     return 'inline';
+      //   else 
+      //     return 'none';
+      // });     
     });
 
     //function for determining rank according to current dimension 

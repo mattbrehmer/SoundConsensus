@@ -29,8 +29,10 @@ albumranks.dt = albumscores.dt
 #ranking function applied to a numeric column
 convertToRank = function(col) {
   
-  if(is.numeric(col))
-    col = rank(-col,na.last = "keep",ties.method = "random")
+  if(is.numeric(col)){
+    col = rank(-col,na.last = "keep",ties.method = "min")
+    col = findInterval(col, sort(unique(col)))
+  }
   
   return(col)
 }
