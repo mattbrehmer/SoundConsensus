@@ -29,7 +29,7 @@ window.onscroll = function(e){
 //initialize dimensions
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = window.innerWidth - 35,
-    height = 1800;
+    height = 2400;
 
 //initialize scales
 var x = d3.scale.ordinal(),
@@ -506,7 +506,14 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       
     //listen for dispatch events from genre selector
     dispatch.on("highlight.row", function(genre,label) {
-      row.style("opacity", function(d){
+      row.selectAll('.album').style("opacity", function(d){
+        if ((d.Genre == genre || genre == "") && 
+            (d.Label == label || label == ""))
+          return 1;
+        else 
+          return 0.25;
+      }); 
+      row.selectAll('.artist').style("opacity", function(d){
         if ((d.Genre == genre || genre == "") && 
             (d.Label == label || label == ""))
           return 1;
@@ -527,28 +534,14 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
         else 
           return -1;                             // a is the hovered element, bring "a" to the front
       });
-      row.style("display", function(d){
-        if ((d.Genre == genre || genre == "") && 
-            (d.Label == label || label == ""))
+
+      row.selectAll('.cell').style("display", function(d){
+        if ((d3.select(this.parentNode).datum().Genre == genre || genre == "") && 
+            (d3.select(this.parentNode).datum().Label == label || label == ""))
           return 'inline';
         else 
           return 'none';
-      }); 
-
-      // row.selectAll('.value').style("display", function(d){
-      //   if ((d3.select(this.parentNode.parentNode.parentNode).datum().Genre == genre || genre == "") && 
-      //       (d3.select(this.parentNode.parentNode.parentNode).datum().Label == label || label == ""))
-      //     return 'inline';
-      //   else 
-      //     return 'none';
-      // }); 
-      // row.selectAll('.score').style("display", function(d){
-      //   if ((d3.select(this.parentNode.parentNode).datum().Genre == genre || genre == "") && 
-      //       (d3.select(this.parentNode.parentNode).datum().Label == label || label == ""))
-      //     return 'inline';
-      //   else 
-      //     return 'none';
-      // });     
+      });    
     });
 
     //function for determining rank according to current dimension 

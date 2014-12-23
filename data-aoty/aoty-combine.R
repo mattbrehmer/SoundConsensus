@@ -23,6 +23,10 @@ albumscores.dt$Album = as.factor(albumscores.dt$Album)
 #sort by artist, album
 setkey(albumscores.dt,Artist,Album)
 
+# albumscores.dt = albumscores.dt[order(-rank(AoTY))]
+# 
+# albumscores.dt = albumscores.dt[1:100]
+
 #duplicate table for storing ranks
 albumranks.dt = albumscores.dt
 

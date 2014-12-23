@@ -45,15 +45,16 @@ body {
   shape-rendering: crispEdges;
 }
 
-rect {
+.bounds {
 	fill: #fff;
-  opactiy: 0;
 	stroke: #bbb;
-	stroke-width: 0.5px;
+	stroke-width: 1px;
 }
 
 .value {
 	fill: #ccc;
+  stroke: #bbb;
+  stroke-width: 1px;
 	cursor: pointer;
 }
 
