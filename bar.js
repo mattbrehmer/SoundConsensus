@@ -40,12 +40,7 @@ var x = d3.scale.ordinal(),
 
 //initialize dispatch for highlighting selections from dropdowns
 var dispatch = d3.dispatch("highlight");
-
-//initialize tooltip, initially invisible
-var tooltip = d3.select("body")
-                .append("div")   
-                .attr("class", "tooltip")              
-                .style("opacity", 0);                      
+                  
 
 //initialize main svg area
 var main_svg = d3.select("body")
@@ -66,7 +61,56 @@ var footer_svg = d3.select("body")
                    .append("svg")
                    .attr("id", "footer_panel")
                    .attr("width", width)
-                   .attr("height", 25) ;                             
+                   .attr("height", 25) ;    
+
+//initialize tooltip svg
+var tooltip_svg = d3.select("body")
+                    .append("svg")
+                    .attr("id", "tooltip_panel")
+                    .attr("class", "tooltip")
+                    .attr("width", 160)
+                    .attr("height", 120);
+
+//tooltip text and link fields
+tooltip_svg.append("a")
+           .attr("id","tooltip_artist_link") 
+           .append("text")
+           .attr("dy", "0.9em")
+           .attr("dx", "0.3em")
+           .attr("class","artist")
+           .attr("id","tooltip_artist");                                                
+
+tooltip_svg.append("a")
+           .attr("id","tooltip_album_link")
+           .append("text")
+           .attr("dy", "1.9em")
+           .attr("dx", "0.3em")
+           .attr("class","album")
+           .attr("id","tooltip_album");                                                
+
+tooltip_svg.append("text")
+          .attr("dy", "3.9em")
+          .attr("dx", "0.3em")
+          .attr("id","tooltip_genre");                                                                                              
+
+tooltip_svg.append("text")
+          .attr("dy", "4.9em")
+          .attr("dx", "0.3em")
+          .attr("id","tooltip_release");     
+
+tooltip_svg.append("text")
+          .attr("dy", "6.9em")
+          .attr("dx", "0.3em")
+          .attr("id","tooltip_score");                                            
+
+tooltip_svg.append("a")
+           .attr("id","tooltip_website_link")
+           .append("text")
+           .attr("dy", "8.9em")
+           .attr("dx", "0.3em")
+           .attr("class","album")
+           .attr("id","tooltip_website");                                                
+
               
 //create an array of known metadata dimensions              
 var metadata = ["Album_url", 
@@ -192,7 +236,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           .append("text")
           .attr("dy", "0.9em")
           .text("AoTY")
-          .style("fill", "#b00")
+          .style("fill", "#de2d26")
           .attr("transform", function(d, i) { 
             return "translate(" + (3.5 * cell_width) + ",0)"; 
           });   
@@ -234,87 +278,151 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                           return "translate(0," + 35 + ")"; 
                         });
 
+    var selected_row = null;                    
+
     //append rows to the table, one for each datum
     var row = table.selectAll("row")
                    .data(data)
                    .enter()
                    .append("g")
                    .attr("class", "row")
-                   .on("mouseenter", function(d,i) { //specify tooltip behaviour
-                    tooltip.transition()
-                       .duration(200) 
-                       .style("opacity", 0);
-                    tooltip.transition()
-                       .duration(200) 
-                       .style("opacity", 1);  
-                    tooltip.html(
-                      "<strong>Artist</strong>: " + d.Artist +  
-                      "<br/><strong>Album</strong>: " + d.Album +   
-                      "<br/><strong>Release Date</strong>: " + d.ReleaseDate +  
-                      "<br/><strong>Label</strong>: " + d.Label +
-                      "<br/><strong>Genre</strong>: " + d.Genre +
-                      "<br/><strong>AoTY rank (score)</strong>: " + (i + 1) +
-                      " / " + (data.length) + " (" + d.AoTY +
-                      ") <br/>" + d.Artist_url)
-                      .style("left", (d3.event.pageX + 10) + "px")       
-                      .style("top", (d3.event.pageY + 15) + "px");                    
-                    // this.parentNode.appendChild(this);
-                    d3.select('.table').selectAll(".row").sort(function (a, b) { // select the parent and sort the path's
-                        if (a.Album_url != d.Album_url) return -1;               // a is not the hovered element, send "a" to the back
-                        else return 1;                             // a is the hovered element, bring "a" to the front
-                    });
-                    d3.select(this) //highlight corresponding row of cells 
-                      .selectAll("rect")
+                   .on("mouseover", function(d,i) { //specify tooltip behaviour 
+                    d3.select("#tooltip_artist")
                       .transition()
-                      .duration(200)
-                      .style("stroke", "#b00");
-                    d3.select(this)
-                      .selectAll("rect.value")
+                      .text(d.Artist);
+                    d3.select("#tooltip_artist_link")
                       .transition()
-                      .duration(200)
-                      .style("fill", "#fcc")
-                      .style("stroke", "#b00");
-                    d3.select(this)
-                      .selectAll("text.album")
-                      .style("fill", "#b00");
-                    d3.select(this)
-                      .selectAll("text.artist")
-                      .style("fill", "#b00");
-                    d3.select(this)
-                      .selectAll("line.link_line")
-                      .style("stroke-width", 2 + "px")
-                      .style("opacity", "1")
-                      .style("stroke", "#b00");
+                      .attr("xlink:href", d.Profile_url);
+                    d3.select("#tooltip_album")
+                      .transition()
+                      .text(d.Album);
+                    d3.select("#tooltip_album_link")
+                      .transition()
+                      .attr("xlink:href", d.Album_url);
+                    d3.select("#tooltip_genre")
+                      .transition()
+                      .text("Genre: " + d.Genre);
+                    d3.select("#tooltip_release")
+                      .transition()
+                      .text("Released: " + d.ReleaseDate + " (" + d.Label + ")");
+                    d3.select("#tooltip_score")
+                      .transition()
+                      .text("AoTY rank (score): " + (i + 1) + " (" + d.AoTY + ")");
+                    d3.select("#tooltip_website_link")
+                      .transition()
+                      .attr("xlink:href", d.Artist_url);
+                    d3.select("#tooltip_website")
+                      .transition()
+                      .text(d.Artist_url);
                   })
-                  .on("mouseleave", function() {  //undo mouseenter events 
-                    tooltip.transition()
-                           .delay(100)
-                           .duration(200) 
-                           .style('pointer-events', 'none')
-                           .style("opacity", 0);                                      
-                    d3.select(this)
-                      .selectAll("rect")
-                      .transition()
-                      .delay(100)
-                      .duration(200)
-                      .style("z-index", "0")
-                      .style("stroke", "#bbb");
-                    d3.select(this)
-                      .selectAll("rect.value")
-                      .transition()
-                      .delay(100)
-                      .duration(200)
-                      .style("fill", "#ccc")
-                      .style("stroke", "#bbb");
-                    d3.select(this).selectAll("text.album")
-                      .style("fill", "#666");
-                    d3.select(this).selectAll("text.artist")
-                      .style("fill", "#000");
-                    d3.select(this)
-                      .selectAll("line.link_line")
-                      .style("stroke-width", 1 + 'px')
-                      .style("opacity", "0.25")
-                      .style("stroke", "#bbb");
+                   .on("mouseenter", function(d,i) {
+                    if (selected_row != d.Album_url) {             
+                      d3.select('.table').selectAll(".row").sort(function (a, b) { // select the parent and sort the path's
+                          if (a.Album_url != d.Album_url && a.Album_url != selected_row) return -1;               // a is not the hovered element, send "a" to the back
+                          else return 1;                             // a is the hovered element, bring "a" to the front
+                      });
+                      d3.select(this) //highlight corresponding row of cells 
+                        .selectAll("rect")
+                        .transition()
+                        .duration(200)
+                        .style("stroke", "#de2d26");
+                      d3.select(this)
+                        .selectAll("rect.value")
+                        .transition()
+                        .duration(200)
+                        .style("fill", "#fcbba1")
+                        .style("stroke", "#de2d26");
+                      d3.select(this)
+                        .selectAll("text.album")
+                        .style("fill", "#de2d26");
+                      d3.select(this)
+                        .selectAll("text.artist")
+                        .style("fill", "#de2d26");
+                      d3.select(this)
+                        .selectAll("line.link_line")
+                        .style("opacity", "1")
+                        .style("stroke", "#de2d26");
+                    }
+                  })
+                .on("click", function(d,i) { //specify tooltip behaviour
+                    if (selected_row == null) {
+                      selected_row = d.Album_url;
+                      d3.select('.table').selectAll(".row").sort(function (a, b) { // select the parent and sort the path's
+                          if (a.Album_url != d.Album_url && a.Album_url != selected_row) return -1;               // a is not the hovered element, send "a" to the back
+                          else return 1;                             // a is the hovered element, bring "a" to the front
+                      });
+                      d3.select(this) //highlight corresponding row of cells 
+                        .selectAll("rect")
+                        .transition()
+                        .duration(200)
+                        .style("stroke", "#54278f");
+                      d3.select(this)
+                        .selectAll("rect.value")
+                        .transition()
+                        .duration(200)
+                        .style("fill", "#bcbddc")
+                        .style("stroke", "#54278f");
+                      d3.select(this)
+                        .selectAll("text.album")
+                        .style("fill", "#54278f");
+                      d3.select(this)
+                        .selectAll("text.artist")
+                        .style("fill", "#54278f");
+                      d3.select(this)
+                        .selectAll("line.link_line")
+                        .style("opacity", "1")
+                        .style("stroke", "#54278f");
+                    }
+                    else if (selected_row == d.Album_url){
+                      selected_row = null;
+                      d3.select(this) //highlight corresponding row of cells 
+                        .selectAll("rect")
+                        .transition()
+                        .duration(200)
+                        .style("stroke", "#bbb");
+                      d3.select(this)
+                        .selectAll("rect.value")
+                        .transition()
+                        .duration(200)
+                        .style("fill", "#ccc")
+                        .style("stroke", "#bbb");
+                      d3.select(this)
+                        .selectAll("text.album")
+                        .style("fill", "#666");
+                      d3.select(this)
+                        .selectAll("text.artist")
+                        .style("fill", "#000");
+                      d3.select(this)
+                        .selectAll("line.link_line")
+                        .style("opacity", "1")
+                        .style("stroke", "#bbb");
+                    }
+                  })
+                  .on("mouseleave", function(d,i) {  //undo mouseenter events                    
+                    if (selected_row != d.Album_url) {                      
+                      d3.select(this)
+                        .selectAll("rect")
+                        .transition()
+                        .delay(100)
+                        .duration(200)
+                        .style("z-index", "0")
+                        .style("stroke", "#bbb");
+                      d3.select(this)
+                        .selectAll("rect.value")
+                        .transition()
+                        .delay(100)
+                        .duration(200)
+                        .style("fill", "#ccc")
+                        .style("stroke", "#bbb");
+                      d3.select(this).selectAll("text.album")
+                        .style("fill", "#666");
+                      d3.select(this).selectAll("text.artist")
+                        .style("fill", "#000");
+                      d3.select(this)
+                        .selectAll("line.link_line")
+                        .style("opacity", "0.25")
+                        .style("stroke", "#bbb");
+                    }
                   });
 
     //append row header to each row to contain artist and album
@@ -342,8 +450,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
     //append album link and name to row header
     row_header.append("a")
-              .attr("xlink:href", function(d){ 
-                return d.Album_url ; 
+              .attr("class", "link")
+              .attr("xlink:href", function(d) { 
+                return d.Album_url; 
               })
               .append("text")
               .attr("class","album")
@@ -401,12 +510,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             });                 
 
     //append link to album page and bar scaled to score to cell
-    aotycell.append("a")
-            .attr("class", "link")
-            .attr("xlink:href", function(d) { 
-              return d.Album_url; 
-            })
-            .append("rect")
+    aotycell.append("rect")
             .attr("class","value")
             .attr("height", cell_height)
             .attr("width", function(d) { 
@@ -432,11 +536,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
     //append line to cell, link to next cell
     aotycell.append("line")
             .attr("class","link_line")
-            // .attr("transform", function(d) { 
-            //             return "translate(" + 
-            //               (-2.5 * cell_width) + 
-            //               ",0)"; 
-            //           })
             .attr("x1", function() {
               return x(dimensions[0]) - 3.825 * cell_width;
             })
@@ -488,13 +587,8 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             return 0 + "px"; 
         });                 
 
-    //append link to album page and bar scaled to score to cell
-    cell.append("a")
-        .attr("class", "link")
-        .attr("xlink:href", function(d) { 
-          return d3.select(this.parentNode.parentNode).datum().Album_url; 
-        })
-        .append("rect")
+    //append bar scaled to score to cell
+    cell.append("rect")
         .attr("class","value")
         .attr("height", cell_height)
         .attr("width", function(d) { 
@@ -507,7 +601,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           if (d == '')
             return y(data.length - 1);
           else
-            return y(getRank(d3.select(this.parentNode.parentNode.parentNode).datum().Album_url,dimensions[i]));        
+            return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]));        
         });
 
     //append album score in the cell
@@ -521,7 +615,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
         })      
         .style("fill", function(d) { 
           if (d == 100)
-            return "#b00"; 
+            return "#de2d26"; 
         })
         .style("font-weight", function(d) { 
           if (d == 100)
@@ -622,19 +716,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       
       return rank - 1;
     }
-
-    // // Add vline to separate AoTY column
-    // main_svg.append("line")
-    //         .attr("class", "vline")
-    //         .attr("transform", function() { 
-    //           return "translate(" + 
-    //             (4.325 * cell_width) + 
-    //             "," + 25 + ")"; 
-    //         })
-    //         .attr("x1", 0)
-    //         .attr("x2", 0)
-    //         .attr("y1", y(0))
-    //         .attr("y2", y(data.length) + 50);
 
     /**
 
