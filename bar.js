@@ -746,7 +746,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           .text("data from AoTY / albumoftheryear.org");
 
     d3.select("#footer")
-      .html("Highlight genres and / or record labels: ")
+      .html("Filter by genre and / or by record label: ")
 
     var empty_string = [""];
 
