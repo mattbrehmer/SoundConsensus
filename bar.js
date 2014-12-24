@@ -29,7 +29,7 @@ window.onscroll = function(e){
 //initialize dimensions
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = window.innerWidth - 35,
-    height = 2400;
+    height = 2440;
 
 //initialize scales
 var x = d3.scale.ordinal(),
@@ -100,15 +100,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
     var cell_width = width / (dimensions.length + 4.5 );
     var cell_height = 16;
 
-    var axis = d3.svg.axis()
-                 .orient("left")
-                 .ticks(0);
-
     x.rangePoints([cell_width * 4, 
       cell_width * 4 + dimensions.length * cell_width], 1);  
 
     //specify range and domain of bar charts based on cell width
-    y.range([0,height - 60])
+    y.range([0,height - 100])
      .domain([0,data.length - 1]);
 
     //specify range and domain of bar charts based on cell width
@@ -285,7 +281,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       .selectAll("text.artist")
                       .style("fill", "#b00");
                     d3.select(this)
-                      .selectAll("line.link")
+                      .selectAll("line.link_line")
+                      .style("stroke-width", 2 + "px")
+                      .style("opacity", "1")
                       .style("stroke", "#b00");
                   })
                   .on("mouseleave", function() {  //undo mouseenter events 
@@ -313,7 +311,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                     d3.select(this).selectAll("text.artist")
                       .style("fill", "#000");
                     d3.select(this)
-                      .selectAll("line.link")
+                      .selectAll("line.link_line")
+                      .style("stroke-width", 1 + 'px')
+                      .style("opacity", "0.25")
                       .style("stroke", "#bbb");
                   });
 
@@ -429,6 +429,33 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                 return y(i);
             });       
 
+    //append line to cell, link to next cell
+    aotycell.append("line")
+            .attr("class","link_line")
+            // .attr("transform", function(d) { 
+            //             return "translate(" + 
+            //               (-2.5 * cell_width) + 
+            //               ",0)"; 
+            //           })
+            .attr("x1", function() {
+              return x(dimensions[0]) - 3.825 * cell_width;
+            })
+            .attr("x2", function() {
+                return x(dimensions[0]) - 3.5 * cell_width;
+            })
+            .attr("y1", function(d,i) {
+              if (getRank(d.Album_url,dimensions[0]) == -1)
+                return y(-1);
+              else
+                return y(i) + cell_height / 2;
+            })
+            .attr("y2", function(d,i) {
+              if (getRank(d.Album_url,dimensions[0]) == -1)
+                return y(-1);
+              else 
+                return y(getRank(d.Album_url,dimensions[0])) + cell_height / 2;
+            });        
+
     //append cells to each row, map each cell to a dimension
     var cell = row.selectAll("cell")                
                   .data(function(d) { 
@@ -512,7 +539,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
     //append line to cell, link to next cell
     cell.append("line")
-        .attr("class","link")
+        .attr("class","link_line")
         .attr("x1", function(d,i) {
           return x(dimensions[i]) + cell_width / 1.5;
         })
@@ -596,15 +623,18 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       return rank - 1;
     }
 
-    // Add axis to separate AoTY column
-    main_svg.append("g")
-            .attr("class", "axis")
-            .attr("transform", function() { 
-              return "translate(" + 
-                (4.325 * cell_width) + 
-                "," + 25 + ")"; 
-            })
-            .call(axis.scale(y));
+    // // Add vline to separate AoTY column
+    // main_svg.append("line")
+    //         .attr("class", "vline")
+    //         .attr("transform", function() { 
+    //           return "translate(" + 
+    //             (4.325 * cell_width) + 
+    //             "," + 25 + ")"; 
+    //         })
+    //         .attr("x1", 0)
+    //         .attr("x2", 0)
+    //         .attr("y1", y(0))
+    //         .attr("y2", y(data.length) + 50);
 
     /**
 

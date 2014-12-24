@@ -71,8 +71,9 @@ body {
 	cursor: pointer;
 }
 
-.link {
-  stroke: #ddd;
+.link_line {
+  stroke: #bbb;
+  opacity: 0.25;
   stroke-width: 1px;
 }
 
@@ -154,9 +155,7 @@ body {
 	fill: #000;
 }
 
-.axis line,
-.axis path {
-  fill: none;
+.vline {
   stroke: #999;
-  shape-rendering: crispEdges;
+  stroke-width: 1px; 
 }
