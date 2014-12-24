@@ -244,7 +244,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                    .enter()
                    .append("g")
                    .attr("class", "row")
-                   .on("mouseover", function(d,i) { //specify tooltip behaviour
+                   .on("mouseenter", function(d,i) { //specify tooltip behaviour
                     tooltip.transition()
                        .duration(200) 
                        .style("opacity", 0);
@@ -284,8 +284,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                     d3.select(this)
                       .selectAll("text.artist")
                       .style("fill", "#b00");
+                    d3.select(this)
+                      .selectAll("line.link")
+                      .style("stroke", "#b00");
                   })
-                  .on("mouseout", function() {  //undo mouseover events 
+                  .on("mouseleave", function() {  //undo mouseenter events 
                     tooltip.transition()
                            .delay(100)
                            .duration(200) 
@@ -309,6 +312,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       .style("fill", "#666");
                     d3.select(this).selectAll("text.artist")
                       .style("fill", "#000");
+                    d3.select(this)
+                      .selectAll("line.link")
+                      .style("stroke", "#bbb");
                   });
 
     //append row header to each row to contain artist and album
@@ -503,6 +509,35 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           else
             return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]));
         });
+
+    //append line to cell, link to next cell
+    cell.append("line")
+        .attr("class","link")
+        .attr("x1", function(d,i) {
+          return x(dimensions[i]) + cell_width / 1.5;
+        })
+        .attr("x2", function(d,i) {
+          if (i + 1 == dimensions.length)
+            return x(dimensions[i]);
+          else
+            return x(dimensions[i+1]);
+        })
+        .attr("y1", function(d,i) {
+          if (i + 1 == dimensions.length || 
+            getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]) == -1 ||
+            getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1]) == -1)
+            return y(-1);
+          else
+            return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i])) + cell_height / 2;
+        })
+        .attr("y2", function(d,i) {
+          if (i + 1 == dimensions.length || 
+            getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]) == -1 ||
+            getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1]) == -1)
+            return y(-1);
+          else 
+            return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1])) + cell_height / 2;
+        });
       
     //listen for dispatch events from genre selector
     dispatch.on("highlight.row", function(genre,label) {
@@ -554,6 +589,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       var dim_index = rank_dimensions.indexOf(dimension);
 
       var rank = rank_data[index][rank_dimensions[dim_index]];
+
+      if (rank - 1 == -1)
+        console
       
       return rank - 1;
     }

@@ -58,6 +58,10 @@ body {
 	cursor: pointer;
 }
 
+.row {
+  pointer-events: all;
+}
+
 .cell text {
 	font: 8px sans-serif;
 	fill: #666;
@@ -65,6 +69,11 @@ body {
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
 	cursor: pointer;
+}
+
+.link {
+  stroke: #ddd;
+  stroke-width: 1px;
 }
 
 .column {
