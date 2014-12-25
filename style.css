@@ -43,12 +43,6 @@ body {
   font: 8px sans-serif;
 }
 
-.column text {
-  fill: black;
-  font: 8px sans-serif;
-  font-weight: bold;
-}
-
 .background path {
   fill: none;
   stroke: #ddd;
@@ -89,7 +83,15 @@ body {
 }
 
 .column {
+  fill: black;
+  font: 8px sans-serif;
+  font-weight: bold;
 	cursor: pointer;
+}
+
+.column:hover {
+  fill: #de2d26;
+  text-decoration: underline;
 }
 
 .year {

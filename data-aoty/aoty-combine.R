@@ -59,4 +59,3 @@ albumranks.dt[,AoTY:=NULL]
 write.csv(albumranks.dt,file="albumranks.csv",quote=F,row.names=F,na="")
 write.csv(albumscores.dt,file="albumscores.csv",quote=F,row.names=F,na="")
 write.csv(list_urls.dt,file="list_urls.csv",quote=F,row.names=F,na="")
-
