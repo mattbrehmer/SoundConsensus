@@ -236,25 +236,56 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //append aoty column head to header
       header.append("a")
             .attr("xlink:href", 
-              "http://www.albumoftheyear.org/ratings/overall/2014/")
+              "http://www.albumoftheyear.org/ratings/overall/2014/15")
             .append("text")
             .attr("dy", "0.9em")
             .text("AoTY")
             .attr("class","column")
             .style("fill", "#de2d26")
-            .attr("transform", function(d, i) { 
+            .attr("transform", function() { 
               return "translate(" + (3.5 * cell_width) + ",0)"; 
-            });   
+            })
+            .on("mouseover", function() { //specify tooltip behaviour, repurpose tooltip
+              d3.select("#tooltip_artist") //reviewer name
+                .transition()
+                .text("albumoftheyear.org");
+              d3.select("#tooltip_artist_link") //reviewer aoty url
+                .transition()
+                .attr("xlink:href", "http://www.albumoftheyear.org/ratings/overall/2014/15");
+              d3.select("#tooltip_album") //reviewer abbreviation
+                .transition()
+                .text("AoTY");
+              d3.select("#tooltip_album_link")
+                .transition()
+                .attr("http://www.albumoftheyear.org/ratings/overall/2014/15");
+              d3.select("#tooltip_genre")
+                .transition()
+                .text("");
+              d3.select("#tooltip_release")
+                .transition()
+                .text("");
+              d3.select("#tooltip_score")
+                .transition()
+                .text("");
+              d3.select("#tooltip_website_link")
+                .transition()
+                .attr("");
+              d3.select("#tooltip_website")
+                .transition()
+                .text("");
+            })
+            .append("title")
+              .text("albumoftheyear.org");   
 
       //append AoTY subtitle to header
       header.append("a")
             .attr("xlink:href", 
-              "http://www.albumoftheyear.org/ratings/overall/2014/")
+              "http://www.albumoftheyear.org/ratings/overall/2014/15")
             .append("text")
             .attr("class","album")
             .attr("dy", "2em")
             .text("(overall)")
-            .attr("transform", function(d, i) { 
+            .attr("transform", function() { 
               return "translate(" + (3.5 * cell_width) + ",0)"; 
             });         
 
