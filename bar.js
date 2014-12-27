@@ -121,15 +121,16 @@ var about_panel = d3.select("body")
                 about_visible = false;
                 d3.select(this).style("display","none");
               })                                                  
-              .html('SoundConsensus is an interactive visualization for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' + 
+              .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' + 
                 'The data, the 105 most-reviewed records released in 2014, is from <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>. ' + 
                 '<br/><br/>Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. ' + 
                 'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score from the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a> ' + 
-                '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the albums; and (2) some music publications use a 10-point scale, resulting in more ties than those using a 100-point or decimal scale. ' + 
+                '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the records; and (2) some music publications use a 10-point scale, resulting in more ties than those using a 100-point or decimal scale. ' + 
                 '<br/><br/>Hover a single record or cell to highlight the corresponding ranks and scores across all the other music publications who reviewed the record, and to see details about the record (genre, record label, release date) in the panel at the lower left. ' + 
                 'Clicking on a cell makes the highlighting persist, so as to facilitate comparisons. Clicking again removes the highlight' +
                 '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a tooltip, along with details about the publication in the panel at the lower left. ' +
-                '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of review scores).');
+                '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of review scores). ' +
+                '<br/><br/>(Click anywhere in this panel to close it.)');
               
 //create an array of known metadata dimensions              
 var metadata = ["Album_url", 
