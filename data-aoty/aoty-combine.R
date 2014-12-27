@@ -27,6 +27,8 @@ setkey(albumscores.dt,Artist,Album)
 # 
 # albumscores.dt = albumscores.dt[1:100]
 
+albumscores.dt = transform(albumscores.dt, SD=apply(albumscores.dt[,3:21, with = F],1, sd, na.rm = TRUE))
+
 #duplicate table for storing ranks
 albumranks.dt = albumscores.dt
 
@@ -58,4 +60,4 @@ albumranks.dt[,AoTY:=NULL]
 #write to csv
 write.csv(albumranks.dt,file="albumranks.csv",quote=F,row.names=F,na="")
 write.csv(albumscores.dt,file="albumscores.csv",quote=F,row.names=F,na="")
-write.csv(list_urls.dt,file="list_urls.csv",quote=F,row.names=F,na="")
+# write.csv(list_urls.dt,file="list_urls.csv",quote=F,row.names=F,na="")

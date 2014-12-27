@@ -121,7 +121,8 @@ var metadata = ["Album_url",
                 "Label",
                 "Genre",
                 "Artist_url",
-                "AoTY"]
+                "AoTY",
+                "SD"]
 
 //load the data from csv
 d3.csv("data-aoty/albumscores.csv", function(error, data) { 
@@ -218,7 +219,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .attr("dy", "0.9em")
             .text("Artist")
             .style("pointer-events", "none")
-            .attr("transform", function(d, i) { 
+            .attr("transform", function() { 
               return "translate(" + (3.25 * cell_width) + ",0)"; 
             });
 
@@ -229,7 +230,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .attr("dy", "2em")
             .text("Album")
             .style("pointer-events", "none")
-            .attr("transform", function(d, i) { 
+            .attr("transform", function() { 
               return "translate(" + (3.25 * cell_width) + ",0)"; 
             });
 
@@ -245,35 +246,6 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .attr("transform", function() { 
               return "translate(" + (3.5 * cell_width) + ",0)"; 
             })
-            .on("mouseover", function() { //specify tooltip behaviour, repurpose tooltip
-              d3.select("#tooltip_artist") //reviewer name
-                .transition()
-                .text("albumoftheyear.org");
-              d3.select("#tooltip_artist_link") //reviewer aoty url
-                .transition()
-                .attr("xlink:href", "http://www.albumoftheyear.org/ratings/overall/2014/15");
-              d3.select("#tooltip_album") //reviewer abbreviation
-                .transition()
-                .text("AoTY");
-              d3.select("#tooltip_album_link")
-                .transition()
-                .attr("http://www.albumoftheyear.org/ratings/overall/2014/15");
-              d3.select("#tooltip_genre")
-                .transition()
-                .text("");
-              d3.select("#tooltip_release")
-                .transition()
-                .text("");
-              d3.select("#tooltip_score")
-                .transition()
-                .text("");
-              d3.select("#tooltip_website_link")
-                .transition()
-                .attr("");
-              d3.select("#tooltip_website")
-                .transition()
-                .text("");
-            })
             .append("title")
               .text("albumoftheyear.org");   
 
@@ -287,7 +259,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .text("(overall)")
             .attr("transform", function() { 
               return "translate(" + (3.5 * cell_width) + ",0)"; 
-            });         
+            })
+            .append("title")
+              .text("albumoftheyear.org");         
 
       //append column heads to header, one for each dimension
       header.selectAll("column")
@@ -890,7 +864,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             selected_label_index = select_label.property("selectedIndex"),
             selected_label = label_options[0][selected_label_index].__data__;
         dispatch.highlight(selected_genre,selected_label);
-      }       
+      } 
 
     }); //end d3.csv load
   }); //end d3.csv load
