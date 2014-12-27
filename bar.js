@@ -69,7 +69,7 @@ var tooltip_svg = d3.select("body")
                     .attr("id", "tooltip_panel")
                     .attr("class", "tooltip")
                     .attr("width", 160)
-                    .attr("height", 120);
+                    .attr("height", 120);                 
 
 //tooltip text and link fields
 tooltip_svg.append("a")
@@ -109,8 +109,27 @@ tooltip_svg.append("a")
            .attr("dy", "8.9em")
            .attr("dx", "0.3em")
            .attr("class","album")
-           .attr("id","tooltip_website");                                                
+           .attr("id","tooltip_website");  
 
+var about_visible = false;              
+
+var about_panel = d3.select("body")
+              .append("div") 
+              .attr("id", "about_panel")    
+              .style("display",'none')
+              .on("click", function() {
+                about_visible = false;
+                d3.select(this).style("display","none");
+              })                                                  
+              .html('SoundConsensus is an interactive visualization for comparing multiple ranked lists of record reviews from 19 prominent music publications.' + 
+                'The data, the 105 most-reviewed records released in 2014, is from <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>.' + 
+                '<br/><br/>Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication.' + 
+                'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score from the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>' + 
+                '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the albums; and (2) some music publications use a 10-point scale, resulting in more ties than those using a 100-point or decimal scale.' + 
+                '<br/><br/>Hover a single record or cell to highlight the corresponding ranks and scores across all the other music publications who reviewed the record, and to see details about the record (genre, record label, release date) in the panel in the lower left.' + 
+                'Clicking on a cell makes the highlighting persist, so as to facilitate comparisons. Clicking again removes the highlight' +
+                '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a tooltip, along with details about the publication in the panel at the lower left.' +
+                '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of review scores).');
               
 //create an array of known metadata dimensions              
 var metadata = ["Album_url", 
@@ -141,7 +160,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
         return metadata.indexOf(d) == -1;
       }));
-      
+
       //determine cell size based on the number of dimensions
       var cell_width = width / (dimensions.length + 4.5 );
       var cell_height = 16;
@@ -813,6 +832,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "0.6em")
+            .attr("dx", "2.5em")
             .text("by @mattbrehmer");
 
       //append subtitle to footer
@@ -822,7 +842,34 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "2.0em")
+            .attr("dx", "2.5em")
             .text("data from AoTY / albumoftheryear.org");
+
+      //append subtitle to footer
+      footer.append("image")
+            .attr("id","info_button")
+            .attr("xlink:href","info.png")
+            .style("cursor","pointer")
+            .attr("width", 16)
+            .attr("height", 16)
+            .on("mouseover", function() {
+              d3.select(this).attr("xlink:href","info-hover.png");
+            })
+            .on("mouseout", function() {
+              d3.select(this).attr("xlink:href","info.png");
+            })
+            .on("click", function() {
+              if (!about_visible) {
+                about_visible = true;
+                d3.select('#about_panel').style("display","inline");
+              }
+              else {
+                about_visible = false;
+                d3.select('#about_panel').style("display","none");
+              }
+            })
+            .append("title")
+            .text("More info");
 
       d3.select("#footer")
         .html("Filter by genre and / or by record label: ")

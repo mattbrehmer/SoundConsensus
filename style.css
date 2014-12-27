@@ -32,6 +32,23 @@ body {
   border: 1px solid #de2d26;
 }
 
+#about_panel {
+  position: fixed;
+  margin: 0px;
+  bottom: 45px;
+  left: 10px;
+  padding: 10px 10px 0px 10px;
+  text-align: left; 
+  width: 310px; 
+  height: 310px;    
+  padding: 5px 5px 5px 5px;
+  font: 9px sans-serif; 
+  background: #eee;  
+  border: 1px solid #999;          
+  border-radius: 4px;
+  z-index: 10;
+}
+
 #footer {
 	position: fixed;
 	bottom: 7px;
@@ -116,6 +133,7 @@ body {
 .attribution {
 	font: 8px sans-serif;
 	fill: #666;
+  cursor: pointer;
 }
 
 .attribution:hover {
