@@ -1,4 +1,6 @@
-![SoundConsensus](screenshots/14.12.28-about-panel.png "SoundConsensus.")
+SoundConsensus
+========
+![SoundConsensus](screenshots/14.12.28-about-panel.png "SoundConsensus")
 
 SoundConsensus is an interactive visualization for comparing multiple ranked lists of record reviews from 19 prominent music publications. The data, the 105 most-reviewed records released in 2014, is from [albumoftheyear.org](http://www.albumoftheyear.org/ratings/overall/2014/15).
 
@@ -15,5 +17,7 @@ Hover a single record or cell to highlight the corresponding ranks and scores ac
 Hover over a column header to see the corresponding music publication's full name in a tooltip, along with details about the publication in the panel at the lower left.
 
 Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of cells).
+
+![SoundConsensus](screenshots/14.12.28-consensus-filtering.png "SoundConsensus")
 
 Select a consensus level from the dropdown box in the lower left to filter based on a record's standard deviation of review scores, where a high standard deviation = low consensus and vice versa (cutoffs are at 20% quantiles).
