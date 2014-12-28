@@ -40,7 +40,7 @@ body {
   padding: 10px 10px 0px 10px;
   text-align: left; 
   width: 300px; 
-  height: 370px;    
+  height: 380px;    
   font: 9px sans-serif; 
   background: #fee0d2;  
   border: 1px solid #de2d26;          
@@ -48,7 +48,7 @@ body {
   z-index: 10;
 }
 
-#footer {
+#filter_div {
 	position: fixed;
 	bottom: 7px;
 	right: 10px;
