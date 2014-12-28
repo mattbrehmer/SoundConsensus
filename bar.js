@@ -733,37 +733,37 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //listen for dispatch events from genre selector
       dispatch.on("highlight.row", function(genre,label) {
         row.selectAll('.album').style("opacity", function(d){
-          if ((d.Genre == genre || genre == "") && 
-              (d.Label == label || label == ""))
+          if ((d.Genre == genre || genre == "( All Genres )") && 
+              (d.Label == label || label == "(  All Record Labels )"))
             return 1;
           else 
             return 0.25;
         }); 
         row.selectAll('.artist').style("opacity", function(d){
-          if ((d.Genre == genre || genre == "") && 
-              (d.Label == label || label == ""))
+          if ((d.Genre == genre || genre == "( All Genres )") && 
+              (d.Label == label || label == "(  All Record Labels )"))
             return 1;
           else 
             return 0.25;
         }); 
         row.style("pointer-events", function(d){
-          if ((d.Genre == genre || genre == "") && 
-              (d.Label == label || label == ""))
+          if ((d.Genre == genre || genre == "( All Genres )") && 
+              (d.Label == label || label == "(  All Record Labels )"))
             return 'inherit';
           else 
             return 'none';
         }); 
         row.sort(function (d, a) { // select the parent and sort the path's
-          if ((d.Genre == genre || genre == "") && 
-              (d.Label == label || label == ""))               // a is not the hovered element, send "a" to the back
-            return 1;
+          if ((d.Genre == genre || genre == "( All Genres )") && 
+              (d.Label == label || label == "(  All Record Labels )"))
+            return 1; // a is not the hovered element, send "a" to the back
           else 
-            return -1;                             // a is the hovered element, bring "a" to the front
+            return -1; // a is the hovered element, bring "a" to the front
         });
 
         row.selectAll('.cell').style("display", function(d){
-          if ((d3.select(this.parentNode).datum().Genre == genre || genre == "") && 
-              (d3.select(this.parentNode).datum().Label == label || label == ""))
+          if ((d3.select(this.parentNode).datum().Genre == genre || genre == "( All Genres )") && 
+              (d3.select(this.parentNode).datum().Label == label || label == "(  All Record Labels )"))
             return 'inline';
           else 
             return 'none';
@@ -875,14 +875,15 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       d3.select("#footer")
         .html("Filter by genre and / or by record label: ")
 
-      var empty_string = [""];
+      var all_genres = ["( All Genres )"];
+      var all_labels = ["(  All Record Labels )"];
 
       //append genre dropdown to footer, 
       var select_genre = d3.select("#footer")
                            .append("select")
                            .on("change", dropdownChange),
           genre_options = select_genre.selectAll("option")
-                                      .data(empty_string.concat(genre_scale.domain().sort()));
+                                      .data(all_genres.concat(genre_scale.domain().sort()));
 
       //populate genre dropdown with genres 
       genre_options.enter()
@@ -896,7 +897,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                           .append("select")
                           .on("change", dropdownChange),
           label_options = select_label.selectAll("option")
-                                    .data(empty_string.concat(label_scale.domain().sort()));
+                                    .data(all_labels.concat(label_scale.domain().sort()));
 
       //populate label dropdown with labels
       label_options.enter()
