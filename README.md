@@ -1,4 +1,8 @@
+![SoundConsensus](screenshots/14.12.28-about-panel.png "SoundConsensus.")
+
 SoundConsensus is an interactive visualization for comparing multiple ranked lists of record reviews from 19 prominent music publications. The data, the 105 most-reviewed records released in 2014, is from [albumoftheyear.org](http://www.albumoftheyear.org/ratings/overall/2014/15).
+
+[Experience SoundConsensus](http://bl.ocks.org/mattbrehmer/raw/9004f31b95a192af18df/).
 
 Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. The bars in each cell encode the score itself.
 
