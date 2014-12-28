@@ -135,6 +135,7 @@ var about_panel = d3.select("body")
                       'Clicking on a cell makes the highlighting persist, so as to facilitate comparisons. Clicking again removes the highlight' +
                       '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a tooltip, along with details about the publication in the panel at the lower left. ' +
                       '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of review scores). ' +
+                      '<br/><br/>Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation = low consensus and vice versa (cutoffs are at 20% quantiles). ' +
                       '<br/><br/>(Click anywhere in this panel to close it.)');
               
 //create an array of known metadata dimensions              
@@ -154,6 +155,10 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
   d3.csv("data-aoty/albumranks.csv", function(error, rank_data) { 
     d3.csv("data-aoty/list_urls.csv", function(error, reviewer_data) { 
 
+      //sort SD array for consensus filtering
+      var sd_arr = data.map(function(e) { return +e.SD; }).sort(d3.ascending);
+
+      //get list of dimensions from rank data
       rank_dimensions = d3.keys(rank_data[0]);
 
       //sort the data based on albumoftheyear (AoTY) aggregate score
@@ -736,31 +741,35 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
           });
         
       //listen for dispatch events from genre selector
-      dispatch.on("highlight.row", function(genre,label) {
+      dispatch.on("highlight.row", function(genre,label,consensus_lb,consensus_ub) {
         row.selectAll('.album').style("opacity", function(d){
           if ((d.Genre == genre || genre == "( All Genres )") && 
-              (d.Label == label || label == "(  All Record Labels )"))
+              (d.Label == label || label == "(  All Record Labels )") &&
+              (d.SD >= consensus_lb) && (d.SD <= consensus_ub))
             return 1;
           else 
             return 0.25;
         }); 
         row.selectAll('.artist').style("opacity", function(d){
           if ((d.Genre == genre || genre == "( All Genres )") && 
-              (d.Label == label || label == "(  All Record Labels )"))
+              (d.Label == label || label == "(  All Record Labels )") &&
+              (d.SD >= consensus_lb) && (d.SD <= consensus_ub))
             return 1;
           else 
             return 0.25;
         }); 
         row.style("pointer-events", function(d){
           if ((d.Genre == genre || genre == "( All Genres )") && 
-              (d.Label == label || label == "(  All Record Labels )"))
+              (d.Label == label || label == "(  All Record Labels )") &&
+              (d.SD >= consensus_lb) && (d.SD <= consensus_ub))
             return 'inherit';
           else 
             return 'none';
         }); 
         row.sort(function (d, a) { // select the parent and sort the path's
           if ((d.Genre == genre || genre == "( All Genres )") && 
-              (d.Label == label || label == "(  All Record Labels )"))
+              (d.Label == label || label == "(  All Record Labels )") &&
+              (d.SD >= consensus_lb) && (d.SD <= consensus_ub))
             return 1; // a is not the hovered element, send "a" to the back
           else 
             return -1; // a is the hovered element, bring "a" to the front
@@ -768,7 +777,8 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
 
         row.selectAll('.cell').style("display", function(d){
           if ((d3.select(this.parentNode).datum().Genre == genre || genre == "( All Genres )") && 
-              (d3.select(this.parentNode).datum().Label == label || label == "(  All Record Labels )"))
+              (d3.select(this.parentNode).datum().Label == label || label == "(  All Record Labels )") &&
+              (d3.select(this.parentNode).datum().SD >= consensus_lb) && (d3.select(this.parentNode).datum().SD <= consensus_ub))
             return 'inline';
           else 
             return 'none';
@@ -878,10 +888,9 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .text("More info");
 
       d3.select("#filter_div")
-        .html("Filter by genre and / or by record label: ")
+        .html("Filter by genre, record label, or level of consensus: ")
 
       var all_genres = ["( All Genres )"];
-      var all_labels = ["(  All Record Labels )"];
 
       //append genre dropdown to footer, 
       var select_genre = d3.select("#filter_div")
@@ -896,6 +905,8 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                    .text(function (d) { 
                     return d; 
                    });     
+      
+      var all_labels = ["(  All Record Labels )"];
 
       //append label dropdown to footer, 
       var select_label = d3.select("#filter_div")
@@ -911,13 +922,65 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                     return d; 
                    });
 
+      //consensus level options
+      var consensus_levels = ["( All Consensus Levels )",
+                              "Low Consensus",
+                              "Low-Medium Consensus",
+                              "Medium Consensus",
+                              "Medium-High Consensus",
+                              "High Consensus"];             
+
+      //append consensus dropdown to footer, 
+      var select_consensus = d3.select("#filter_div")
+                               .append("select")
+                               .on("change", dropdownChange),
+          consensus_options = select_consensus.selectAll("option")
+                                              .data(consensus_levels);
+
+      //populate consensus dropdown with consensus levels 
+      consensus_options.enter()
+                       .append("option")
+                       .text(function (d) { 
+                        return d; 
+                       });
+
       //whenever an option is selected from the dropdowns, issue a dispatch event 
       function dropdownChange() {
         var selected_genre_index = select_genre.property("selectedIndex"),
             selected_genre = genre_options[0][selected_genre_index].__data__,
             selected_label_index = select_label.property("selectedIndex"),
-            selected_label = label_options[0][selected_label_index].__data__;
-        dispatch.highlight(selected_genre,selected_label);
+            selected_label = label_options[0][selected_label_index].__data__,
+            selected_consensus_index = select_consensus.property("selectedIndex"),
+            consensus_lb,consensus_ub; //consensus upper and lower bounds
+
+            switch(selected_consensus_index) {
+              case 0: //all consensus levels
+                consensus_lb = d3.min(sd_arr);
+                consensus_ub = d3.max(sd_arr);
+                break;
+              case 1: //low consensus
+                consensus_lb = d3.quantile(sd_arr,0.8);
+                consensus_ub = d3.max(sd_arr);
+                break; 
+              case 2: //low-medium consensus
+                consensus_lb = d3.quantile(sd_arr,0.6);
+                consensus_ub = d3.quantile(sd_arr,0.8);
+                break;
+              case 3: //middle consensus
+                consensus_lb = d3.quantile(sd_arr,0.4);
+                consensus_ub = d3.quantile(sd_arr,0.6);
+                break;
+              case 4: //middle-high consensus
+                consensus_lb = d3.quantile(sd_arr,0.2);
+                consensus_ub = d3.quantile(sd_arr,0.4);
+                break;
+              case 5: //high consensus
+                consensus_lb = d3.min(sd_arr);
+                consensus_ub = d3.quantile(sd_arr,0.2);
+                break;
+            }
+
+        dispatch.highlight(selected_genre,selected_label,consensus_lb,consensus_ub);
       } 
 
     }); //end d3.csv load
