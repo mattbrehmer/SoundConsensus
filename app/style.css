@@ -1,0 +1,187 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#header_panel {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 10px 10px 0px 10px;
+	background: #eee;
+	border-bottom: 1px solid #999;
+}
+
+#footer_panel {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 10px 10px 0px 10px;
+	background: #eee;
+  opacity: 1;
+	border-top: 1px solid #999;
+}
+
+#tooltip_panel {
+  position: fixed;
+  margin: 0px;
+  bottom: 45px;
+  right: 10px;
+  padding: 10px 10px 0px 10px;
+  border: 1px solid #de2d26;
+}
+
+#about_panel {
+  position: fixed;
+  margin: 0px;
+  bottom: 45px;
+  left: 10px;
+  padding: 10px 10px 0px 10px;
+  text-align: left; 
+  width: 400px; 
+  height: 400px;    
+  font: 9px sans-serif; 
+  background: #fee0d2;  
+  border: 1px solid #de2d26;          
+  border-radius: 4px;
+  z-index: 10;
+}
+
+#filter_div {
+	position: fixed;
+	bottom: 7px;
+	right: 10px;
+	margin: 0px;
+	padding: 0px;
+	z-index: 10;
+	fill: #666;
+  font: 8px sans-serif;
+}
+
+.background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+.bounds {
+	fill: #fff;
+	stroke: #bbb;
+	stroke-width: 1px;
+  cursor: pointer;
+}
+
+.value {
+	fill: #ccc;
+  stroke: #bbb;
+  stroke-width: 1px;
+	cursor: pointer;
+}
+
+.row {
+  pointer-events: all;
+}
+
+.cell text {
+	font: 8px sans-serif;
+	fill: #666;
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+	cursor: pointer;
+}
+
+.link_line {
+  stroke: #bbb;
+  opacity: 0.25;
+  stroke-width: 1px;
+}
+
+.column {
+  fill: black;
+  font: 8px sans-serif;
+  font-weight: bold;
+	cursor: pointer;
+}
+
+.column:hover {
+  fill: #de2d26;
+  text-decoration: underline;
+}
+
+.year {
+	fill: #de2d26;
+	font-weight: bold;
+	font-family: Palatino, Times, serif;
+}
+
+.title {
+	font-family: Palatino, Times, serif;
+	font-weight: bold;
+	fill: #666;
+	cursor: default;
+}
+
+.subtitle {
+	font: 8px sans-serif;
+	cursor: default;
+	fill: #666;
+}
+
+.attribution {
+	font: 8px sans-serif;
+	fill: #666;
+  cursor: pointer;
+}
+
+.attribution:hover {
+	fill: #de2d26;
+	text-decoration: underline;
+}
+
+.artist {
+	font: 8px sans-serif;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.artist:hover {
+	fill: #de2d26;
+	text-decoration: underline;
+}
+
+.album {
+	font: 8px sans-serif;
+	fill: #666;
+	cursor: pointer;
+}
+
+.index {
+	font: 7px sans-serif;
+	fill: #999;
+	cursor: default;
+}
+
+.album:hover {
+	fill: #de2d26;
+	text-decoration: underline;
+}
+
+.tooltip {
+  position: absolute;	
+  text-align: left;	
+  width: 190px;	
+  height: 100px;		
+  padding: 5px 5px 5px 5px;
+  font: 8px sans-serif;	
+  background: #fee0d2;	
+  border: 0px #de2d26;					
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.vline {
+  stroke: #999;
+  stroke-width: 1px; 
+}
