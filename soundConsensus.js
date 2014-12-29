@@ -882,7 +882,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //append subtitle to footer
       footer.append("a")
             .attr("xlink:href", 
-              "http://www.albumoftheyear.org/ratings/overall/2014/")
+              "http://www.albumoftheyear.org/ratings/overall/2014/15")
             .append("text")
             .attr("class","attribution")
             .attr("dy", "2.0em")
