@@ -127,15 +127,17 @@ var about_panel = d3.select("body")
                       d3.select(this).style("display","none");
                     })                                                  
                     .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' + 
-                      'The data, the 105 most-reviewed records released in 2014, is from <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>. ' + 
+                      'The data visualized here represents the 105 most-reviewed records released in 2014, according to the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>. ' + 
                       '<br/><br/>Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. ' + 
-                      'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score from the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a> ' + 
-                      '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the records; and (2) some music publications use a 10-point scale, resulting in more ties than those using a 100-point or decimal scale. ' + 
-                      '<br/><br/>Hover a single record or cell to highlight the corresponding ranks and scores across all the other music publications who reviewed the record, and to see details about the record (genre, record label, release date) in the panel at the lower left. ' + 
-                      'Clicking on a cell makes the highlighting persist, so as to facilitate comparisons. Clicking again removes the highlight' +
+                      'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score calculated by <a href="http://www.albumoftheyear.org/ratings/overall/2014/15">albumoftheyear.org</a>. ' + 
+                      '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the records; and (2) some music publications use a 10-point scale when rating a record, resulting in more ties than those using a 100-point or decimal scale. ' + 
+                      '<br/><br/>Hover over a record\'s artist or name to highlight the ranks and scores across all of the music publications who reviewed the record, and to see details about the record (such as genre, record label, and release date) in the panel at the lower left. ' + 
+                      '<br/><br/>You can also hover over any cell. ' + 
+                      'Clicking on a cell makes the highlighting persist, which can facilitate comparisons between records. Clicking again removes the highlight. ' +
+                      '<br/><br/>Click on an artist name or album name to visit corresponding <a href="http://www.albumoftheyear.org">albumoftheyear.org</a> artist and album profile pages, which contain links to the original reviews. ' + 
                       '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a tooltip, along with details about the publication in the panel at the lower left. ' +
-                      '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the data (this maintains the relative vertical positions of review scores). ' +
-                      '<br/><br/>Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation = low consensus and vice versa (cutoffs are at 20% quantiles). ' +
+                      '<br/><br/>Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the list of records (filtering maintains the relative rank positions of review scores). ' +
+                      '<br/><br/>Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa (consensus ranges are at 20% quantiles). ' +
                       '<br/><br/>(Click anywhere in this panel to close it.)');
               
 //create an array of known metadata dimensions              
@@ -841,6 +843,32 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       var footer = footer_svg.append("g")
                              .attr("class","footer");
 
+       //append artist column head to header
+      footer.append("text")
+            .attr("class","artist")
+            .attr("id","more_info")
+            .attr("dy", "1.3em")
+            .attr("dx", "2.2em")
+            .text("More Info")
+            .on("mouseover", function() {
+              d3.select(this).style("fill","#de2d26");
+              d3.select('#info_button').attr("xlink:href","info-hover.png");
+            })
+            .on("mouseout", function() {
+              d3.select(this).style("fill","#000");
+              d3.select('#info_button').attr("xlink:href","info.png");
+            })
+            .on("click", function() {
+              if (!about_visible) {
+                about_visible = true;
+                d3.select('#about_panel').style("display","inline");
+              }
+              else {
+                about_visible = false;
+                d3.select('#about_panel').style("display","none");
+              }
+            });                             
+
       //append title to footer                       
       footer.append("a")
             .attr("xlink:href", 
@@ -848,7 +876,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "0.6em")
-            .attr("dx", "2.5em")
+            .attr("dx", "7.5em")
             .text("by @mattbrehmer");
 
       //append subtitle to footer
@@ -858,7 +886,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "2.0em")
-            .attr("dx", "2.5em")
+            .attr("dx", "7.5em")
             .text("data from AoTY / albumoftheryear.org");
 
       //append subtitle to footer
@@ -869,9 +897,11 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             .attr("width", 16)
             .attr("height", 16)
             .on("mouseover", function() {
+              d3.select('#more_info').style("fill","#de2d26");
               d3.select(this).attr("xlink:href","info-hover.png");
             })
             .on("mouseout", function() {
+              d3.select('#more_info').style("fill","#000");
               d3.select(this).attr("xlink:href","info.png");
             })
             .on("click", function() {

@@ -39,8 +39,8 @@ body {
   left: 10px;
   padding: 10px 10px 0px 10px;
   text-align: left; 
-  width: 300px; 
-  height: 420px;    
+  width: 400px; 
+  height: 400px;    
   font: 9px sans-serif; 
   background: #fee0d2;  
   border: 1px solid #de2d26;          
@@ -143,6 +143,7 @@ body {
 .artist {
 	font: 8px sans-serif;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 .artist:hover {
@@ -153,6 +154,7 @@ body {
 .album {
 	font: 8px sans-serif;
 	fill: #666;
+	cursor: pointer;
 }
 
 .index {
