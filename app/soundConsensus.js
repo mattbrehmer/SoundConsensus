@@ -624,17 +624,17 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
               .attr("x2", function() {
                   return x(dimensions[0]) - 3.5 * cell_width;
               })
-              .attr("y1", function(d,i) {
-                if (getRank(d.Album_url,dimensions[0]) == -1)
-                  return y(-1);
-                else
-                  return y(i) + cell_height / 2;
+              .attr("y1", function(d,i) {                
+                return y(i) + cell_height / 2;
               })
               .attr("y2", function(d,i) {
+                return y(getRank(d.Album_url,dimensions[0])) + cell_height / 2;
+              })
+              .style("display", function(d,i){
                 if (getRank(d.Album_url,dimensions[0]) == -1)
-                  return y(-1);
-                else 
-                  return y(getRank(d.Album_url,dimensions[0])) + cell_height / 2;
+                  return "none";
+                else
+                  return "inline";
               });        
 
       //append cells to each row, map each cell to a dimension
@@ -720,26 +720,24 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
             return x(dimensions[i]) + cell_width / 1.5;
           })
           .attr("x2", function(d,i) {
-            if (i + 1 == dimensions.length)
-              return x(dimensions[i]);
-            else
+            if (i + 1 != dimensions.length)
               return x(dimensions[i+1]);
+            else
+              return x(dimensions[i]) + cell_width / 1.5;
           })
           .attr("y1", function(d,i) {
-            if (i + 1 == dimensions.length || 
-              getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]) == -1 ||
-              getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1]) == -1)
-              return y(-1);
-            else
-              return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i])) + cell_height / 2;
+            return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i])) + cell_height / 2;
           })
           .attr("y2", function(d,i) {
+            return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1])) + cell_height / 2;
+          })
+          .style("display", function(d,i){            
             if (i + 1 == dimensions.length || 
               getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i]) == -1 ||
               getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1]) == -1)
-              return y(-1);
-            else 
-              return y(getRank(d3.select(this.parentNode.parentNode).datum().Album_url,dimensions[i+1])) + cell_height / 2;
+              return "none";
+            else
+              return "inline";
           });
         
       //listen for dispatch events from genre selector
