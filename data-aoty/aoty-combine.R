@@ -9,8 +9,8 @@ albumscores.dt[,Album.1:=NULL]
 
 #coerce classes on columns, remove commas from character columns
 albumscores.dt$ReleaseDate = as.Date(albumscores.dt$ReleaseDate,format = "%B %d, %Y")
-albumscores.dt$url = as.factor(albumscores.dt$url)
-setnames(albumscores.dt,"url","Artist_url")
+# albumscores.dt$url = as.factor(albumscores.dt$url)
+# setnames(albumscores.dt,"url","Artist_url")
 albumscores.dt$Label = gsub(",","",albumscores.dt$Label)
 albumscores.dt$Label = as.factor(albumscores.dt$Label)
 albumscores.dt$Genre = gsub(",","",albumscores.dt$Genre)
@@ -60,4 +60,4 @@ albumranks.dt[,AoTY:=NULL]
 #write to csv
 write.csv(albumranks.dt,file="albumranks.csv",quote=F,row.names=F,na="")
 write.csv(albumscores.dt,file="albumscores.csv",quote=F,row.names=F,na="")
-# write.csv(list_urls.dt,file="list_urls.csv",quote=F,row.names=F,na="")
+write.csv(list_urls.dt,file="list_urls.csv",quote=F,row.names=F,na="")

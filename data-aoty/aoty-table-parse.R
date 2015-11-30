@@ -3,7 +3,7 @@ require(data.table)
 #scrape the aggregate score table for the specified year
 scrapeTable = function(year){
   
-  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/15",sep = "")
+  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/14",sep = "")
   
   raw.data = readLines(url,warn=F)
   
@@ -18,7 +18,7 @@ scrapeTable = function(year){
 }
 
 #change X in scrapeTable(X) to specify the year e.g. 2014
-table = scrapeTable(2014)
+table = scrapeTable(2015)
 
 table = unique(table) #remove duplicate header rows
 table = table[-26] #remove first duplicate header row

@@ -1,12 +1,12 @@
 #main pre-processing script
 
 #change year as necessary
-yr = 2014
+yr = 2015
 
 source("aoty-table-parse.R")
 source("aoty-scrape.R")
 source("aoty-combine.R")
-
+# 
 # require(data.table)
 
 #preprocess from previously cleaned csv files
