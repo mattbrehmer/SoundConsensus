@@ -3,7 +3,7 @@ require(data.table)
 #scrape the aggregate score table for the specified year
 scrapeTable = function(year){
   
-  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/15",sep = "")
+  url = paste("http://www.albumoftheyear.org/ratings/overall/",year,"/16",sep = "")
   
   raw.data = readLines(url,warn=F)
   

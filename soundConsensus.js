@@ -126,10 +126,10 @@ var about_panel = d3.select("body")
                       about_visible = false;
                       d3.select(this).style("display","none");
                     })
-                    .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from prominent music publications. ' +
-                      'The data visualized here represents the 140 most-reviewed records released in 2015, according to the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2015">albumoftheyear.org</a>. ' +
+                    .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' +
+                      'The data visualized here represents the 108 most-reviewed records released in 2015, according to the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
                       '<br/><br/><strong>Visual Encoding</strong>: Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. ' +
-                      'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score calculated by <a href="http://www.albumoftheyear.org/ratings/overall/2015">albumoftheyear.org</a>. ' +
+                      'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score calculated by <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
                       '<br/><br/>The columns are of unequal size because: (1) not all of the music publications reviewed all of the records; and (2) some music publications use a 10-point scale when rating a record, resulting in more ties than those using a 100-point or decimal scale. ' +
                       '<br/><br/><strong>Interaction</strong>: Hover over a record\'s artist or name to highlight the ranks and scores across all of the music publications who reviewed the record, and to see details about the record (such as genre, record label, and release date) in the panel at the lower left. ' +
                       '<br/><br/>You can also hover over any cell. ' +
@@ -270,7 +270,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //append aoty column head to header
       header.append("a")
             .attr("xlink:href",
-              "http://www.albumoftheyear.org/ratings/overall/2015")
+              "http://www.albumoftheyear.org/ratings/overall/2015/16")
             .append("text")
             .attr("dy", "0.9em")
             .text("AoTY")
@@ -285,7 +285,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //append AoTY subtitle to header
       header.append("a")
             .attr("xlink:href",
-              "http://www.albumoftheyear.org/ratings/overall/2015")
+              "http://www.albumoftheyear.org/ratings/overall/2015/16")
             .append("text")
             .attr("class","album")
             .attr("dy", "2em")
@@ -881,7 +881,7 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       //append subtitle to footer
       footer.append("a")
             .attr("xlink:href",
-              "http://www.albumoftheyear.org/ratings/overall/2015")
+              "http://www.albumoftheyear.org/ratings/overall/2015/16")
             .append("text")
             .attr("class","attribution")
             .attr("dy", "2.0em")
