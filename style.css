@@ -1,5 +1,5 @@
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Century Gothic", Helvetica, Arial, sans-serif;
 }
 
 #header_panel {
@@ -38,12 +38,12 @@ body {
   bottom: 45px;
   left: 10px;
   padding: 10px 10px 0px 10px;
-  text-align: left; 
-  width: 420px; 
-  height: 420px;    
-  font: 9px sans-serif; 
-  background: #fee0d2;  
-  border: 1px solid #de2d26;          
+  text-align: left;
+  width: 420px;
+  height: 420px;
+  font: 9px "Century Gothic", sans-serif;
+  background: #fee0d2;
+  border: 1px solid #de2d26;
   border-radius: 4px;
   z-index: 10;
 }
@@ -56,7 +56,7 @@ body {
 	padding: 0px;
 	z-index: 10;
 	fill: #666;
-  font: 8px sans-serif;
+  font: 8px "Century Gothic", sans-serif;
 }
 
 .background path {
@@ -84,9 +84,9 @@ body {
 }
 
 .cell text {
-	font: 8px sans-serif;
+	font: 8px "Century Gothic", sans-serif;
 	fill: #666;
-	-webkit-user-select: none; /* Chrome/Safari */        
+	-webkit-user-select: none; /* Chrome/Safari */
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
 	cursor: pointer;
@@ -113,24 +113,25 @@ body {
 .year {
 	fill: #de2d26;
 	font-weight: bold;
-	font-family: Palatino, Times, serif;
+	font-family: "Century Gothic", Times, serif;
 }
 
 .title {
-	font-family: Palatino, Times, serif;
+  font-size: 17px;
+	font-family: "Century Gothic", Times, serif;
 	font-weight: bold;
 	fill: #666;
 	cursor: default;
 }
 
 .subtitle {
-	font: 8px sans-serif;
+	font: 8px "Century Gothic", sans-serif;
 	cursor: default;
 	fill: #666;
 }
 
 .attribution {
-	font: 8px sans-serif;
+	font: 8px "Century Gothic", sans-serif;
 	fill: #666;
   cursor: pointer;
 }
@@ -141,7 +142,7 @@ body {
 }
 
 .artist {
-	font: 8px sans-serif;
+	font: 8px "Century Gothic", sans-serif;
 	font-weight: bold;
 	cursor: pointer;
 }
@@ -152,13 +153,13 @@ body {
 }
 
 .album {
-	font: 8px sans-serif;
+	font: 8px "Century Gothic", sans-serif;
 	fill: #666;
 	cursor: pointer;
 }
 
 .index {
-	font: 7px sans-serif;
+	font: 7px "Century Gothic", sans-serif;
 	fill: #999;
 	cursor: default;
 }
@@ -169,19 +170,19 @@ body {
 }
 
 .tooltip {
-  position: absolute;	
-  text-align: left;	
-  width: 190px;	
-  height: 100px;		
+  position: absolute;
+  text-align: left;
+  width: 290px;
+  height: 110px;
   padding: 5px 5px 5px 5px;
-  font: 8px sans-serif;	
-  background: #fee0d2;	
-  border: 0px #de2d26;					
+  font: 8px "Century Gothic", sans-serif;
+  background: #fee0d2;
+  border: 0px #de2d26;
   border-radius: 4px;
   z-index: 10;
 }
 
 .vline {
   stroke: #999;
-  stroke-width: 1px; 
+  stroke-width: 1px;
 }

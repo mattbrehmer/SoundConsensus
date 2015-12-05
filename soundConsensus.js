@@ -11,6 +11,42 @@ December 2015
 
 **/
 
+// image pre-loading
+// https://gist.github.com/steveosoule/5815908
+function preloadImagesFromDirectory(dir){
+	if(!dir) return;
+	function getJSON(URL,success){
+		// Create new function (within global namespace) (With unique name):
+		var uniqueID = 'json'+(+(new Date()));
+			window[uniqueID] = function(data){
+				success && success(data);
+			};
+
+		// Append new SCRIPT element to DOM:
+		document.getElementsByTagName('body')[0].appendChild((function(){
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = URL.replace('callback=?','callback=' + uniqueID);
+			return script;
+		})());
+	}
+
+	function preload(srcArray){
+		for(var i = 0; i < srcArray.length; i++){
+			(new Image()).src = srcArray[i];
+		}
+	}
+
+	// Get that JSON data:
+	getJSON('scanImageDirectory.json.php?directory=' + encodeURIComponent(dir) + '&callback=?', function(data){
+		return data.images ? preload( data.images ) : false;
+	});
+}
+
+window.onload = function(){
+	preloadImagesFromDirectory('art/');
+}
+
 //track horizontal and vertical scrolling
 window.pos = function() {
   if (window.scrollX != null && window.scrollY != null)
@@ -29,7 +65,7 @@ window.onscroll = function(e){
 //initialize dimensions
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = window.innerWidth - 35,
-    height = 2440;
+    height = 4000;
 
 //initialize scales
 var x = d3.scale.ordinal(),
@@ -72,14 +108,13 @@ var footer_svg = d3.select("body")
 var tooltip_svg = d3.select("body")
                     .append("svg")
                     .attr("id", "tooltip_panel")
-                    .attr("class", "tooltip")
-                    .attr("width", 160)
-                    .attr("height", 120);
+                    .attr("class", "tooltip");
 
 //tooltip text and link fields
 tooltip_svg.append("a")
            .attr("id","tooltip_artist_link")
            .append("text")
+           .attr("x",105)
            .attr("dy", "0.9em")
            .attr("dx", "0.3em")
            .attr("class","artist")
@@ -88,22 +123,36 @@ tooltip_svg.append("a")
 tooltip_svg.append("a")
            .attr("id","tooltip_album_link")
            .append("text")
+           .attr("x",105)
            .attr("dy", "1.9em")
            .attr("dx", "0.3em")
            .attr("class","album")
            .attr("id","tooltip_album");
 
+tooltip_svg.append("a")
+          .attr("id","tooltip_album_art_link")
+          .append("svg:image")
+          .attr("x",0)
+          .attr("y",0)
+          .attr("width",100)
+          .attr("height",100)
+          .attr("class","album_art")
+          .attr("id","tooltip_album_art");
+
 tooltip_svg.append("text")
+          .attr("x",105)
           .attr("dy", "3.9em")
           .attr("dx", "0.3em")
           .attr("id","tooltip_genre");
 
 tooltip_svg.append("text")
+          .attr("x",105)
           .attr("dy", "4.9em")
           .attr("dx", "0.3em")
           .attr("id","tooltip_release");
 
 tooltip_svg.append("text")
+          .attr("x",105)
           .attr("dy", "6.9em")
           .attr("dx", "0.3em")
           .attr("id","tooltip_score");
@@ -111,6 +160,7 @@ tooltip_svg.append("text")
 tooltip_svg.append("a")
            .attr("id","tooltip_website_link")
            .append("text")
+           .attr("x",105)
            .attr("dy", "8.9em")
            .attr("dx", "0.3em")
            .attr("class","album")
@@ -225,19 +275,19 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
       header.append("text")
             .attr("class","year")
             .attr("dy", "0.7em")
-            .attr("dx", "8em")
+            .attr("dx", "8.6em")
             .attr("dx", function() {
               if (width >= 1400)
-                return "8em";
+                return "8.6em";
               else
-                return "1.4em"; //condensed version for small windows
+                return "1.5em"; //condensed version for small windows
             })
            .text("15");
 
       //append subtitle to header
       header.append("text")
             .attr("class","subtitle")
-            .attr("dy", "2.1em")
+            .attr("dy", "2.4em")
             .text(function() {
               if (width >= 1400)
                 return "a visual summary of music review scores";
@@ -327,6 +377,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
               d3.select("#tooltip_album_link")
                 .transition()
                 .attr("xlink:href", getReviewerData(d,1));
+              d3.select("#tooltip_album_art_link")
+                  .transition()
+                  .attr("xlink:href", "");
+              d3.select("#tooltip_album_art")
+                  .transition()
+                  .attr("xlink:href", "");
               d3.select("#tooltip_genre")
                 .transition()
                 .text("");
@@ -379,6 +435,12 @@ d3.csv("data-aoty/albumscores.csv", function(error, data) {
                       d3.select("#tooltip_album")
                         .transition()
                         .text(d.Album);
+                      d3.select("#tooltip_album_art")
+                        .transition()
+                        .attr("xlink:href", d.Cover)
+                      d3.select("#tooltip_album_art_link")
+                          .transition()
+                          .attr("xlink:href", d.Album_url);
                       d3.select("#tooltip_album_link")
                         .transition()
                         .attr("xlink:href", d.Album_url);
