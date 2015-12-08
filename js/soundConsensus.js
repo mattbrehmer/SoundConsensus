@@ -435,12 +435,10 @@ d3.csv("data/albumscores.csv", function(error, data) {
                         d3.select(this) //highlight corresponding row of cells
                           .selectAll("rect")
                           .transition()
-                          .duration(200)
                           .style("stroke", "#de2d26");
                         d3.select(this)
                           .selectAll("rect.value")
                           .transition()
-                          .duration(200)
                           .style("fill", "#fcbba1")
                           .style("stroke", "#de2d26");
                         d3.select(this)
@@ -465,12 +463,10 @@ d3.csv("data/albumscores.csv", function(error, data) {
                         d3.select(this) //highlight corresponding row of cells
                           .selectAll("rect")
                           .transition()
-                          .duration(200)
                           .style("stroke", "#54278f");
                         d3.select(this)
                           .selectAll("rect.value")
                           .transition()
-                          .duration(200)
                           .style("fill", "#bcbddc")
                           .style("stroke", "#54278f");
                         d3.select(this)
@@ -489,12 +485,10 @@ d3.csv("data/albumscores.csv", function(error, data) {
                         d3.select(this) //highlight corresponding row of cells
                           .selectAll("rect")
                           .transition()
-                          .duration(200)
                           .style("stroke", "#bbb");
                         d3.select(this)
                           .selectAll("rect.value")
                           .transition()
-                          .duration(200)
                           .style("fill", "#ccc")
                           .style("stroke", "#bbb");
                         d3.select(this)
@@ -514,15 +508,11 @@ d3.csv("data/albumscores.csv", function(error, data) {
                         d3.select(this)
                           .selectAll("rect")
                           .transition()
-                          .delay(100)
-                          .duration(200)
                           .style("z-index", "0")
                           .style("stroke", "#bbb");
                         d3.select(this)
                           .selectAll("rect.value")
                           .transition()
-                          .delay(100)
-                          .duration(200)
                           .style("fill", "#ccc")
                           .style("stroke", "#bbb");
                         d3.select(this).selectAll("text.album")
