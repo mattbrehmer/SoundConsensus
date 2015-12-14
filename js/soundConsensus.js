@@ -140,7 +140,7 @@ var about_panel = d3.select("body")
                       about_visible = false;
                       d3.select(this).style("display","none");
                     })
-                    .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' +
+                    .html('<a href="https://github.com/mattbrehmer/SoundConsensus" target="_blank"><strong>SoundConsensus</strong></a> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' +
                       'The data visualized here represents the 108 most-reviewed records released in 2015, according to the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
                       '<br/><br/><strong>Visual Encoding</strong>: Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. ' +
                       'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score calculated by <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
@@ -151,7 +151,8 @@ var about_panel = d3.select("body")
                       '<br/><br/>Click on an artist name or album name to visit corresponding <a href="http://www.albumoftheyear.org">albumoftheyear.org</a> artist and album profile pages, which contain links to the original reviews. ' +
                       '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a detail, along with details about the publication in the panel at the lower left. ' +
                       '<br/><br/><strong>Genre / Record Label Filtering</strong>: Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the list of records (filtering maintains the relative rank positions of review scores). ' +
-                      '<br/><br/><strong>Consensus Filtering</strong>: Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa (consensus ranges are at 20% quantiles). ' +
+                      '<br/><br/><strong>Consensus Filtering</strong>: Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa. ' +
+                      '<br/><br/>View the <a href="https://github.com/mattbrehmer/SoundConsensus" target=_blank">Github repo</a>.' +
                       '<br/><br/>(Click anywhere in this panel to close it.)');
 
 //create an array of known metadata dimensions
@@ -225,7 +226,9 @@ d3.csv("data/albumscores.csv", function(error, data) {
                              .attr("class","header");
 
       //append title to header
-      header.append("text")
+      header.append("a")
+            .attr("xlink:href","https://github.com/mattbrehmer/SoundConsensus")
+            .append("text")
             .attr("class","title")
             .attr("dy", "0.7em")
 						.attr("dx", "1em")
@@ -904,6 +907,21 @@ d3.csv("data/albumscores.csv", function(error, data) {
 						.text(function() {
               if (width >= 1400)
                 return "by @mattbrehmer";
+              else
+                return ""; //short version for small windows
+            });
+
+      //append title to footer
+      footer.append("a")
+            .attr("xlink:href",
+              "https://github.com/mattbrehmer/SoundConsensus")
+            .append("text")
+            .attr("class","attribution")
+            .attr("dy", "0.6em")
+            .attr("dx", "17em")
+						.text(function() {
+              if (width >= 1400)
+                return "(github repo)";
               else
                 return ""; //short version for small windows
             });

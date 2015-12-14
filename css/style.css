@@ -47,7 +47,7 @@ body {
   padding: 10px 10px 0px 10px;
   text-align: left;
   width: 470px;
-  height: 470px;
+  height: 500px;
   font-family: "Century Gothic", Helvetica, Arial, sans-serif;
   font-size: 9px;
   background: #fee0d2;
@@ -138,7 +138,11 @@ label {
   font-family: "Century Gothic", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	fill: #666;
-	cursor: default;
+}
+
+.title:hover {
+  fill: #de2d26;
+	text-decoration: underline;
 }
 
 .subtitle {
