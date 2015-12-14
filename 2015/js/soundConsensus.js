@@ -151,7 +151,7 @@ var about_panel = d3.select("body")
                       '<br/><br/>Click on an artist name or album name to visit corresponding <a href="http://www.albumoftheyear.org">albumoftheyear.org</a> artist and album profile pages, which contain links to the original reviews. ' +
                       '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a detail, along with details about the publication in the panel at the lower left. ' +
                       '<br/><br/><strong>Genre / Record Label Filtering</strong>: Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the list of records (filtering maintains the relative rank positions of review scores). ' +
-                      '<br/><br/><strong>Consensus Filtering</strong>: Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa (consensus ranges are at 20% quantiles). ' +
+                      '<br/><br/><strong>Consensus Filtering</strong>: Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa. ' +
                       '<br/><br/>View the <a href="https://github.com/mattbrehmer/SoundConsensus" target=_blank">Github repo</a>.' +
                       '<br/><br/>(Click anywhere in this panel to close it.)');
 
