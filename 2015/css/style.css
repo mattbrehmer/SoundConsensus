@@ -141,6 +141,11 @@ label {
 	cursor: default;
 }
 
+.title:hover {
+  fill: #de2d26;
+	text-decoration: underline;
+}
+
 .subtitle {
 	font-size: 8px;
 	cursor: default;
