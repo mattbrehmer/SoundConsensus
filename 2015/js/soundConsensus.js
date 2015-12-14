@@ -140,7 +140,7 @@ var about_panel = d3.select("body")
                       about_visible = false;
                       d3.select(this).style("display","none");
                     })
-                    .html('<strong>SoundConsensus</strong> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' +
+                    .html('<a href="https://github.com/mattbrehmer/SoundConsensus" target="_blank"><strong>SoundConsensus</strong></a> is an interactive visualization by @<a href="https://twitter.com/mattbrehmer">mattbrehmer</a> for comparing multiple ranked lists of record reviews from 19 prominent music publications. ' +
                       'The data visualized here represents the 108 most-reviewed records released in 2015, according to the music publication aggregator site <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
                       '<br/><br/><strong>Visual Encoding</strong>: Each column is associated with a music publication. Each cell containing a bar corresponds to a review score. The vertical position of a cell encodes its rank among other reviews from that publication. ' +
                       'The bars in each cell encode the score itself.<br/><br/>The first column is unique in that it encodes the overall rank and score calculated by <a href="http://www.albumoftheyear.org/ratings/overall/2015/16">albumoftheyear.org</a>. ' +
@@ -225,7 +225,9 @@ d3.csv("data/albumscores.csv", function(error, data) {
                              .attr("class","header");
 
       //append title to header
-      header.append("text")
+      header.append("a")
+            .attr("xlink:href","https://github.com/mattbrehmer/SoundConsensus")
+            .append("text")
             .attr("class","title")
             .attr("dy", "0.7em")
 						.attr("dx", "1em")
@@ -904,6 +906,21 @@ d3.csv("data/albumscores.csv", function(error, data) {
 						.text(function() {
               if (width >= 1400)
                 return "by @mattbrehmer";
+              else
+                return ""; //short version for small windows
+            });
+
+      //append title to footer
+      footer.append("a")
+            .attr("xlink:href",
+              "https://github.com/mattbrehmer/SoundConsensus")
+            .append("text")
+            .attr("class","attribution")
+            .attr("dy", "0.6em")
+            .attr("dx", "9.5em")
+						.text(function() {
+              if (width >= 1400)
+                return "(github repo)";
               else
                 return ""; //short version for small windows
             });
