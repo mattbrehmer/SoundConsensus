@@ -152,6 +152,7 @@ var about_panel = d3.select("body")
                       '<br/><br/>Hover over a column header to see the corresponding music publication\'s full name in a detail, along with details about the publication in the panel at the lower left. ' +
                       '<br/><br/><strong>Genre / Record Label Filtering</strong>: Select a musical genre and / or record label from the dropdown boxes in the lower left to filter the list of records (filtering maintains the relative rank positions of review scores). ' +
                       '<br/><br/><strong>Consensus Filtering</strong>: Select a consensus level from the dropdown box in the lower left to filter based on a record\'s standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa (consensus ranges are at 20% quantiles). ' +
+                      '<br/><br/>View the <a href="https://github.com/mattbrehmer/SoundConsensus" target=_blank">Github repo</a>.' +
                       '<br/><br/>(Click anywhere in this panel to close it.)');
 
 //create an array of known metadata dimensions
@@ -917,7 +918,7 @@ d3.csv("data/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "0.6em")
-            .attr("dx", "9.5em")
+            .attr("dx", "12.5em")
 						.text(function() {
               if (width >= 1400)
                 return "(github repo)";
