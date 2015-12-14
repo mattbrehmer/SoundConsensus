@@ -24,4 +24,4 @@ __Genre / Record Label Filtering__: Select a musical genre and / or record label
 
 ![SoundConsensus](screenshots/14.12.28-consensus-filtering.png "SoundConsensus")
 
-__Consensus Filtering__: Select a consensus level from the dropdown box in the lower left to filter based on a record's standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa (consensus ranges are at 20% quantiles).
+__Consensus Filtering__: Select a consensus level from the dropdown box in the lower left to filter based on a record's standard deviation of review scores, where a high standard deviation corresponds to a low consensus, and vice versa.
