@@ -918,7 +918,7 @@ d3.csv("data/albumscores.csv", function(error, data) {
             .append("text")
             .attr("class","attribution")
             .attr("dy", "0.6em")
-            .attr("dx", "15em")
+            .attr("dx", "17em")
 						.text(function() {
               if (width >= 1400)
                 return "(github repo)";
